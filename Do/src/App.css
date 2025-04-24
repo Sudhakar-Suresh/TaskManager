@@ -1,8 +1,44 @@
+/* Reset root styles */
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+/* Main container */
+.app-container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: white;
+  display: flex;
+}
+
+/* Sidebar styles */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 250px;
+  background-color: #f8f9fa;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+}
+
+/* Main content styles */
+.main-content {
+  flex: 1;
+  padding: 20px;
+  margin-left: 60px; /* This accounts for the collapsed sidebar width */
+  transition: margin-left 0.3s ease;
+  background-color: white;
+}
+
+/* When sidebar is expanded */
+.main-content.shifted {
+  margin-left: 250px;
 }
 
 .logo {

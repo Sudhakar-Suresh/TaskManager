@@ -1,0 +1,420 @@
+/* Setting icon that remains visible */
+.settings-icon-container {
+    display: none;
+  }
+  
+  .settings-icon-circle {
+    display: none;
+  }
+  
+  /* Floating settings icon that's always visible */
+  .floating-settings-icon {
+    position: fixed;
+    left: 20px;
+    top: 30px;
+    width: 36px;
+    height: 36px;
+    border-radius: 80%;
+    background: #f7efef;
+    border: 1px solid #c7c3c3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1001;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+  
+  .floating-settings-icon:hover {
+    transform: scale(1.05);
+    background-color: #e8e8e8;
+  }
+  
+  .floating-settings-icon span {
+    width: 24px;
+    height: 24px;
+    display: block;
+  }
+  
+  /* Sidebar styles */
+  .sidebar {
+    width: 250px;
+    background-color: #ffffff;
+    height: 100vh;
+    padding: 0px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    border-right: 1px solid #ffffff;
+    overflow-y: auto;
+    transition: transform 0.3s ease;
+    z-index: 1000;
+  }
+  
+  .sidebar.collapsed {
+    transform: translateX(-100%);
+  }
+  
+  .sidebar.expanded {
+    transform: translateX(0);
+  }
+  
+  .sidebar.pinned {
+    transform: translateX(0) !important;
+  }
+  
+  .sidebar::-webkit-scrollbar {
+    width: 0px;
+  }
+  
+  .sidebar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .sidebar::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+  }
+  
+  .sidebar-header {
+    padding-bottom: 0px;
+    border-bottom: none;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  
+  .sidebar-menu {
+    list-style: none;
+  }
+  
+  .sidebar-menu-item {
+    padding: 12px 0;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-bottom: 5px;
+  }
+  
+  .sidebar-menu-item:hover {
+    background-color: #3c3c3c;
+  }
+  
+  .sidebar-menu-item.active {
+    background-color: #3c3c3c;
+  }
+  
+  /* User Profile */
+  .user-profile {
+    display: flex;
+    align-items: center;
+    gap: 1px;
+    margin-bottom: 16px;
+    margin-top: 20px;
+    margin-left: 10px;
+    width: 100%;
+  }
+  
+  .profile-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f5f5f5;
+    border: 1px solid #e0e0e0;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    overflow: hidden;
+  }
+  
+  .profile-icon .settings-icon {
+    width: 24px;
+    height: 24px;
+    display: block;
+  }
+  
+  .profile-icon:hover {
+    transform: scale(1.05);
+    background-color: #e8e8e8;
+  }
+  
+  .profile-info h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .profile-info .subtitle {
+    margin: 0;
+    font-size: 12px;
+    color: #666;
+  }
+  
+  /* Navigation Menu */
+  .nav-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 16px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .nav-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    margin-left: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .nav-item:hover {
+    background-color: #f5f5f5;
+    
+  }
+  
+  
+  .nav-icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+  }
+  
+  .lottie-icon {
+    pointer-events: none;
+    transition: transform 0.9s ease;
+  }
+  
+  .nav-item:hover .lottie-icon {
+    transform: scale(1.1);
+  }
+  
+  .nav-label {
+    flex: 1;
+    font-size: 14px;
+    color: #333;
+  }
+  
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 10px;
+    background-color: #f1f3f4;
+    color: #5f6368;
+    font-size: 12px;
+    font-weight: 500;
+    margin-left: auto;
+    transition: all 0.2s ease;
+  }
+  
+  .nav-item:hover .badge:not(.beta) {
+    background-color: #e8eaed;
+  }
+  
+  .nav-item.active .badge:not(.beta) {
+    background-color: #1a73e8;
+    color: white;
+  }
+  
+  .badge.beta {
+    background-color: #2196f3;
+    color: white;
+    text-transform: uppercase;
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+  
+  /* Create View Button */
+  .create-view {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border: none;
+    background: none;
+    color: #666;
+    cursor: pointer;
+    font-size: 14px;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 16px;
+  }
+  
+  .create-view:hover {
+    background-color: #ffffff;
+    border-radius: 6px;
+  }
+  
+  /* Lists Section */
+  .lists-section {
+    margin-top: 8px;
+  }
+  
+  .lists-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  
+  .lists-header h3 {
+    margin-left: 20px;
+    font-size: 16px;
+    font-weight: bolder;
+    color: #000000;
+  }
+  
+  .add-list {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background-color: transparent;
+    font-size: 18px;
+    color: #5f6368;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .add-list:hover {
+    background-color: rgba(0,0,0,0.05);
+  }
+  
+  .lists-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .list-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .list-item:hover {
+    background-color: #f5f5f5;
+  }
+  
+  .list-label {
+    flex: 1;
+    font-size: 14px;
+  }
+  
+  /* Lottie Animation Styles */
+  .lottie-icon {
+    pointer-events: none;
+    transition: transform 0.3s ease, filter 0.3s ease;
+  }
+  
+  .nav-item:hover .lottie-icon {
+    transform: scale(1.1);
+    filter: brightness(1.2);
+  }
+  
+  /* Add these styles to your Sidebar.css file */
+  
+  .new-list-form {
+    padding: 8px 16px;
+    cursor: default;
+  }
+  
+  .new-list-form:hover {
+    background-color: transparent;
+  }
+  
+  .new-list-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+  
+  .new-list-actions {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .create-list-btn, .cancel-list-btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  
+  .create-list-btn {
+    background-color: #4285F4;
+    color: white;
+  }
+  
+  .cancel-list-btn {
+    background-color: #f1f3f4;
+    color: #5f6368;
+  }
+  
+  /* Hide the settings icon in the sidebar when using floating one */
+  .sidebar .profile-icon {
+    visibility: hidden;
+  }
+  
+  /* Adjust profile info to fill the space */
+  .sidebar .profile-info {
+    padding-left: 20px;
+  }
+  
+  /* Add hover behavior to detect when mouse leaves the sidebar */
+  .sidebar:not(:hover) {
+    transform: translateX(-100%);
+  }
+  
+  /* Keep the sidebar visible when hovering settings icon or sidebar itself */
+  .floating-settings-icon:hover + .sidebar,
+  .sidebar:hover {
+    transform: translateX(0);
+  }
+  
+  /* Pin button styles */
+  .pin-button {
+    background: none;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 5px;
+    transition: transform 0.3s ease, color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 20px;
+  }
+  
+  .pin-button:hover {
+    color: #555;
+  }
+  
+  .pin-button.active {
+    color: #2196f3;
+    transform: rotate(-45deg);
+  }
+  

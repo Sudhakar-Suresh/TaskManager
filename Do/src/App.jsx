@@ -1,34 +1,48 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import Sidebar from './components/Sidebar/Sidebar'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [activePage, setActivePage] = useState('My day')
+  const [userLists, setUserLists] = useState([])
+  const [taskCounts, setTaskCounts] = useState({
+    myDay: 0,
+    next7Days: 0
+  })
+
+  const handlePageChange = (page) => {
+    setActivePage(page)
+  }
+
+  const handleAddList = (listName) => {
+    setUserLists([...userLists, listName])
+  }
+
+  const handleListSelect = (listName) => {
+    setActivePage(listName)
+  }
+
+  const handleSidebarToggle = (isExpanded) => {
+    // Handle sidebar expansion state if needed
+    console.log('Sidebar expanded:', isExpanded)
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="app-container">
+      <Sidebar 
+        onPageChange={handlePageChange}
+        onAddList={handleAddList}
+        userLists={userLists}
+        activeItem={activePage}
+        onListSelect={handleListSelect}
+        onSidebarToggle={handleSidebarToggle}
+        taskCounts={taskCounts}
+      />
+      <div className="main-content">
+        <h1>{activePage}</h1>
+        {/* Add your main content here */}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </div>
   )
 }
 
