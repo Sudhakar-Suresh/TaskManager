@@ -1,6 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 import Sidebar from './components/Sidebar/Sidebar'
+import MyDay from './components/MyDay/MyDay'
+import BackgroundImage from './components/BackgroundImage/BackgroundImage'
 
 function App() {
   const [activePage, setActivePage] = useState('My day')
@@ -10,6 +12,14 @@ function App() {
     myDay: 0,
     next7Days: 0
   })
+
+  // Restore background from localStorage on initial load
+  useEffect(() => {
+    const savedBackgroundId = localStorage.getItem('selectedBackground');
+    if (savedBackgroundId) {
+      // You can implement additional logic here if needed
+    }
+  }, []);
 
   const handlePageChange = (page) => {
     setActivePage(page)
@@ -27,6 +37,16 @@ function App() {
     setIsSidebarExpanded(isExpanded)
   }
 
+  const renderContent = () => {
+    switch(activePage) {
+      case 'My day':
+        return <MyDay />;
+      // Add other cases for different pages
+      default:
+        return <div>Select a page</div>;
+    }
+  }
+
   return (
     <div className="app-container">
       <Sidebar 
@@ -39,9 +59,11 @@ function App() {
         taskCounts={taskCounts}
       />
       <div className={`main-content ${isSidebarExpanded ? 'shifted' : ''}`}>
-        <h1>{activePage}</h1>
-        {/* Add your main content here */}
+        {renderContent()}
       </div>
+      
+      {/* BackgroundImage component should be outside other components */}
+      <BackgroundImage />
     </div>
   )
 }

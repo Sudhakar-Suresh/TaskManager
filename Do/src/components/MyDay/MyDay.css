@@ -1,0 +1,293 @@
+.myday-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 30px 40px;
+  height: 100%;
+  position: relative;
+}
+
+/* Header Styles */
+.myday-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 40px;
+}
+
+.header-content h1 {
+  font-size: 32px;
+  font-weight: 500;
+  color: #202124;
+  margin: 0;
+  margin-bottom: 8px;
+}
+
+.dot {
+  color: var(--main-background);
+}
+
+.subtitle {
+  font-size: 16px;
+  color: #5f6368;
+  margin: 0;
+}
+
+.header-actions {
+  display: flex;
+  gap: 16px;
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  color: #5f6368;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-button:hover {
+  color: #1a73e8;
+}
+
+/* Date Section */
+.date-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.date-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 40px;
+  min-width: 80px;
+}
+
+.day-name {
+  font-size: 14px;
+  color: #5f6368;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.date-number {
+  font-size: 40px;
+  font-weight: 500;
+  color: #202124;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.month-name {
+  font-size: 14px;
+  color: #5f6368;
+}
+
+.event-info {
+  color: #5f6368;
+  font-size: 14px;
+}
+
+/* Empty State */
+.empty-state {
+  height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Tasks List */
+.tasks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+.task-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 16px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s;
+}
+
+.task-item:hover {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.task-item input[type="checkbox"] {
+  margin-right: 16px;
+  margin-top: 2px;
+  width: 18px;
+  height: 18px;
+  accent-color: #1a73e8;
+}
+
+.task-item.completed span {
+  text-decoration: line-through;
+  color: #80868b;
+}
+
+.task-content {
+  flex: 1;
+}
+
+.task-title {
+  font-size: 16px;
+  color: #202124;
+  margin-bottom: 4px;
+}
+
+.task-note {
+  font-size: 14px;
+  color: #5f6368;
+  margin-bottom: 8px;
+}
+
+.task-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.task-due-date,
+.task-list {
+  font-size: 12px;
+  padding: 2px 8px;
+  background: #f1f3f4;
+  border-radius: 4px;
+  color: #5f6368;
+}
+
+.task-tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.task-tag {
+  font-size: 12px;
+  padding: 2px 8px;
+  background: #e8f0fe;
+  border-radius: 4px;
+  color: #1a73e8;
+}
+
+/* Add Task Section */
+.add-task-section {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 500px;
+  z-index: 10;
+}
+
+.add-task-input {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.plus-icon {
+  color: #1a73e8;
+  margin-right: 12px;
+}
+
+.add-task-input input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  color: #202124;
+  background: transparent;
+}
+
+.add-task-input input::placeholder {
+  color: #5f6368;
+}
+
+.task-input-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.task-input-container {
+  background-color: white;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  width: 90%;
+  max-width: 500px;
+}
+
+.task-input-container form {
+  display: flex;
+  gap: 12px;
+}
+
+.task-input-container input {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.task-input-container button {
+  background-color: #1a73e8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 12px 24px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.task-input-container button:hover {
+  background-color: #1557b0;
+}
+
+/* Make the empty state use the variable for background */
+.empty-state .blue-circle {
+  background: var(--main-background);
+}
+
+/* Add this to your MyDay.css */
+.empty-state-background {
+  height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: var(--selected-background-image);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 12px;
+  margin: 0 auto;
+  max-width: 800px;
+} 
