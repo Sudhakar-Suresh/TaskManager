@@ -9,7 +9,7 @@ import AddListPopup from '../AddListPopup/AddListPopup';
 // Import animation data
 import settingData from '../../assets/sidebar/setting.json';
 import calendarData from '../../assets/sidebar/calendar.json';
-import dateData from '../../assets/sidebar/date.json';
+import dayData from '../../assets/sidebar/day.json';
 import taskData from '../../assets/sidebar/task.json';
 import bookData from '../../assets/sidebar/book.json';
 import homeData from '../../assets/sidebar/home.json';
@@ -18,7 +18,7 @@ const Sidebar = ({ onPageChange, onAddList, userLists = [], activeItem = 'My day
   // Create refs for each icon
   const settingRef = useRef(null);
   const calendarRef = useRef(null);
-  const dateRef = useRef(null);
+  const dayRef = useRef(null);
   const taskRef = useRef(null);
   const bookRef = useRef(null);
   const homeRef = useRef(null);
@@ -63,12 +63,12 @@ const Sidebar = ({ onPageChange, onAddList, userLists = [], activeItem = 'My day
       animationData: calendarData
     });
 
-    animationsRef.current.date = lottie.loadAnimation({
-      container: dateRef.current,
+    animationsRef.current.day = lottie.loadAnimation({
+      container: dayRef.current,
       renderer: 'svg',
       loop: false,
       autoplay: false,
-      animationData: dateData
+      animationData: dayData
     });
 
     animationsRef.current.task = lottie.loadAnimation({
@@ -248,9 +248,9 @@ const Sidebar = ({ onPageChange, onAddList, userLists = [], activeItem = 'My day
             <li 
               className={`nav-item ${activeItem === 'Next 7 days' ? 'active' : ''}`}
               onClick={() => handleItemClick('Next 7 days')}
-              onMouseEnter={() => handleItemHover('date')}
+              onMouseEnter={() => handleItemHover('day')}
             >
-              <div className="nav-icon lottie-icon" ref={dateRef}></div>
+              <div className="nav-icon lottie-icon" ref={dayRef}></div>
               <span className="nav-label">Next 7 days</span>
               {taskCounts.next7Days > 0 && (
                 <span className="badge">{taskCounts.next7Days}</span>

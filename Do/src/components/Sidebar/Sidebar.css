@@ -419,3 +419,53 @@
     transform: rotate(-45deg);
   }
   
+  /* Add these styles to your Sidebar.css */
+  
+  /* Active state for nav items */
+  .nav-item.active {
+    background-color: #f0f7ff; /* Light blue background */
+  }
+  
+  .nav-item.active .nav-label {
+    color: #1a73e8; /* Google Blue */
+    font-weight: 500;
+  }
+  
+  /* Active state for Lottie icons */
+  .nav-item.active .lottie-icon svg path,
+  .nav-item.active .lottie-icon svg circle,
+  .nav-item.active .lottie-icon svg rect,
+  .nav-item.active .lottie-icon svg polygon {
+    stroke: #1a73e8 !important; /* Google Blue */
+    fill: #1a73e8 !important;
+  }
+  
+  /* Active state for badges */
+  .nav-item.active .badge:not(.beta) {
+    background-color: #e8f0fe; /* Light blue background */
+    color: #1a73e8; /* Google Blue */
+  }
+  
+  /* Hover state for active items */
+  .nav-item.active:hover {
+    background-color: #e8f0fe; /* Slightly darker blue background */
+  }
+  
+  /* List items active state */
+  .list-item.active {
+    background-color: #f0f7ff;
+  }
+  
+  .list-item.active .list-label {
+    color: #1a73e8;
+    font-weight: 500;
+  }
+  
+  .list-item.active .lottie-icon svg path,
+  .list-item.active .lottie-icon svg circle,
+  .list-item.active .lottie-icon svg rect,
+  .list-item.active .lottie-icon svg polygon {
+    stroke: #1a73e8 !important;
+    fill: #1a73e8 !important;
+  }
+  
