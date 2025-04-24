@@ -5,6 +5,7 @@ import Sidebar from './components/Sidebar/Sidebar'
 function App() {
   const [activePage, setActivePage] = useState('My day')
   const [userLists, setUserLists] = useState([])
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(false)
   const [taskCounts, setTaskCounts] = useState({
     myDay: 0,
     next7Days: 0
@@ -23,8 +24,7 @@ function App() {
   }
 
   const handleSidebarToggle = (isExpanded) => {
-    // Handle sidebar expansion state if needed
-    console.log('Sidebar expanded:', isExpanded)
+    setIsSidebarExpanded(isExpanded)
   }
 
   return (
@@ -38,7 +38,7 @@ function App() {
         onSidebarToggle={handleSidebarToggle}
         taskCounts={taskCounts}
       />
-      <div className="main-content">
+      <div className={`main-content ${isSidebarExpanded ? 'shifted' : ''}`}>
         <h1>{activePage}</h1>
         {/* Add your main content here */}
       </div>

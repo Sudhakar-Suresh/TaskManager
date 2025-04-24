@@ -3,15 +3,17 @@
   max-width: none;
   margin: 0;
   padding: 0;
-  text-align: left;
+  width: 100%;
+  height: 100vh;
 }
 
 /* Main container */
 .app-container {
-  width: 100%;
-  min-height: 100vh;
-  background-color: white;
   display: flex;
+  width: 100%;
+  height: 100vh;
+  background-color: white;
+  position: relative;
 }
 
 /* Sidebar styles */
@@ -20,23 +22,26 @@
   left: 0;
   top: 0;
   height: 100vh;
+  width: 60px;
+  z-index: 100;
+  transition: width 0.3s ease;
+}
+
+.sidebar.expanded {
   width: 250px;
-  background-color: #f8f9fa;
-  padding: 20px;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  overflow-y: auto;
 }
 
 /* Main content styles */
 .main-content {
   flex: 1;
+  min-height: 100vh;
+  margin-left: 60px;
   padding: 20px;
-  margin-left: 60px; /* This accounts for the collapsed sidebar width */
   transition: margin-left 0.3s ease;
   background-color: white;
+  overflow-x: hidden;
 }
 
-/* When sidebar is expanded */
 .main-content.shifted {
   margin-left: 250px;
 }
