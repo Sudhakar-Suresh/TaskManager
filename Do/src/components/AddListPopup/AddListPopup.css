@@ -1,9 +1,9 @@
-.add-list-popup {
+.add-list-overlay {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  right: 0;
+  bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
@@ -11,51 +11,90 @@
   z-index: 1000;
 }
 
-.popup-content {
-  background-color: white;
-  padding: 20px;
+.add-list-popup {
+  background: white;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  width: 300px;
+  width: 500px;
+  max-width: 90vw;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  position: relative;
 }
 
-.popup-content h3 {
-  margin: 0 0 20px 0;
-  color: #333;
-}
-
-.popup-content input {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 20px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 14px;
-}
-
-.popup-buttons {
+.add-list-header {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
+  padding: 12px;
 }
 
-.popup-buttons button {
-  padding: 8px 16px;
+.close-btn {
+  background: none;
   border: none;
-  border-radius: 4px;
+  font-size: 24px;
+  color: #666;
   cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.popup-buttons button[type="button"] {
-  background-color: #f0f0f0;
+.close-btn:hover {
   color: #333;
 }
 
-.popup-buttons button[type="submit"] {
-  background-color: #0066ff;
-  color: white;
+.input-container {
+  padding: 0 24px 24px;
 }
 
-.popup-buttons button:hover {
-  opacity: 0.9;
+.list-title-input {
+  width: 100%;
+  padding: 8px 0;
+  border: none;
+  border-bottom: 1px solid #ddd;
+  font-size: 32px;
+  color: #757575;
+  font-weight: 300;
+  background: transparent;
+}
+
+.list-title-input::placeholder {
+  color: #BBBBBB;
+  opacity: 1;
+}
+
+.list-title-input:focus {
+  outline: none;
+  border-bottom-color: #4285f4;
+}
+
+.add-list-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px 24px;
+}
+
+.continue-btn {
+  background-color: #a9d1f8;
+  color: white;
+  border: none;
+  padding: 12px 32px;
+  border-radius: 24px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.continue-btn:hover:not(:disabled) {
+  background-color: #88c0f8;
+}
+
+.continue-btn:disabled {
+  background-color: #a9d1f8;
+  cursor: not-allowed;
+  opacity: 0.7;
 } 
