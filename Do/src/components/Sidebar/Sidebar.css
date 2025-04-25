@@ -10,13 +10,13 @@
   /* Floating settings icon that's always visible */
   .floating-settings-icon {
     position: fixed;
-    left: 20px;
-    top: 30px;
-    width: 36px;
-    height: 36px;
+    left: 10px;
+    top: 20px;
+    width: 46px;
+    height: 46px;
     border-radius: 80%;
-    background: #f7efef;
-    border: 1px solid #c7c3c3;
+    background: #e4e4e400;
+    border: 2px solid #000000;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -39,13 +39,13 @@
   /* Sidebar styles */
   .sidebar {
     width: 250px;
-    background-color: #ffffff;
+    background-color: #ffffffa9;
     height: 100vh;
     padding: 0px;
     position: fixed;
     left: 0;
     top: 0;
-    border-right: 1px solid #ffffff;
+    border-right: 1px solid #ffffff00;
     overflow-y: auto;
     transition: transform 0.3s ease;
     z-index: 1000;
@@ -164,7 +164,6 @@
     display: flex;
     align-items: center;
     padding: 8px 12px;
-    border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.2s;
   }
@@ -423,7 +422,7 @@
   
   /* Active state for nav items */
   .nav-item.active {
-    background-color: #f0f7ff; /* Light blue background */
+    background-color: #f0f7ff00; /* Light blue background */
   }
   
   .nav-item.active .nav-label {
@@ -448,7 +447,7 @@
   
   /* Hover state for active items */
   .nav-item.active:hover {
-    background-color: #e8f0fe; /* Slightly darker blue background */
+    background-color: #f5f5f5; /* Slightly darker blue background */
   }
   
   /* List items active state */

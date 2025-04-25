@@ -32,8 +32,8 @@
 .background-toggle-button {
   width: 56px;
   height: 56px;
-  border-radius: 50%;
-  border: none;
+  border-radius: 10%;
+  border: 1.5px solid #ffffff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   display: flex;

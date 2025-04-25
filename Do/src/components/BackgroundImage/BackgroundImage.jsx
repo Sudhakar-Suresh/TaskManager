@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './BackgroundImage.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPalette, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 // Import all background images
 import bg1 from '../../assets/background/1136887.jpg';
@@ -26,8 +26,10 @@ import bg19 from '../../assets/background/12844.jpg';
 import bg20 from '../../assets/background/7266862.jpg';
 
 const BackgroundImage = ({ onBackgroundChange }) => {
+  // Get saved background from localStorage or use 'bg1' as default
+  const savedBackground = localStorage.getItem('selectedBackground') || 'bg1';
   const [showModal, setShowModal] = useState(false);
-  const [selectedBackground, setSelectedBackground] = useState('bg1');
+  const [selectedBackground, setSelectedBackground] = useState(savedBackground);
   const [searchTerm, setSearchTerm] = useState('');
   
   // Background image options
@@ -56,12 +58,41 @@ const BackgroundImage = ({ onBackgroundChange }) => {
   
   // Set initial background on component mount
   useEffect(() => {
-    // Set default background
-    const initialBg = backgrounds.find(bg => bg.id === selectedBackground);
-    if (initialBg) {
-      applyBackground(initialBg);
+    // Find the selected background object using the ID from localStorage
+    const savedBgObj = backgrounds.find(bg => bg.id === savedBackground);
+    
+    // If we found a valid background object, apply it
+    if (savedBgObj) {
+      applyBackground(savedBgObj);
+    } else {
+      // Fallback to first background if saved ID is invalid
+      const defaultBg = backgrounds[0];
+      applyBackground(defaultBg);
+      setSelectedBackground(defaultBg.id);
     }
+    
+    // Add event listener for storage changes (for multi-tab support)
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Cleanup function
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
   }, []);
+  
+  // Handle changes to localStorage from other tabs/windows
+  const handleStorageChange = (event) => {
+    if (event.key === 'selectedBackground') {
+      const newBackgroundId = event.newValue;
+      if (newBackgroundId && newBackgroundId !== selectedBackground) {
+        const newBg = backgrounds.find(bg => bg.id === newBackgroundId);
+        if (newBg) {
+          setSelectedBackground(newBackgroundId);
+          applyBackground(newBg);
+        }
+      }
+    }
+  };
   
   const toggleModal = () => {
     setShowModal(!showModal);
@@ -111,7 +142,7 @@ const BackgroundImage = ({ onBackgroundChange }) => {
           }}
         >
           <div className="button-overlay">
-            <FontAwesomeIcon icon={faPalette} className="palette-icon" />
+            {/* Button overlay without icon */}
           </div>
         </button>
       </div>
