@@ -1,6 +1,6 @@
 import React from 'react';
 import './MainContent.css';
-import MyDay from '../MyDay/MyDay';
+import MyDay from '../../pages/MyDay/MyDay';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faSync, faBell, faSquare, faSearch } from '@fortawesome/free-solid-svg-icons';
 

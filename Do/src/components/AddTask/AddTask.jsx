@@ -1,222 +1,96 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './AddTask.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faPlus, 
-  faBell, 
-  faCalendarAlt, 
-  faTag, 
-  faTimes,
-  faCheck
-} from '@fortawesome/free-solid-svg-icons';
 
-const AddTask = ({ onAddTask, listOptions = [] }) => {
+const AddTask = ({ onAddTask }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [taskTitle, setTaskTitle] = useState('');
-  const [taskNotes, setTaskNotes] = useState('');
-  const [selectedList, setSelectedList] = useState(listOptions[0] || 'My day');
-  const [dueDate, setDueDate] = useState('');
-  const [tags, setTags] = useState([]);
-  const [reminder, setReminder] = useState(null);
-  
-  const inputRef = useRef(null);
-  const componentRef = useRef(null);
-  
-  // Focus the input when expanded
-  useEffect(() => {
-    if (isExpanded && inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, [isExpanded]);
-  
-  // Handle clicks outside to collapse
+  const [taskText, setTaskText] = useState('');
+  const taskInputRef = useRef(null);
+  const containerRef = useRef(null);
+
+  // Handle clicks outside the component
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (componentRef.current && !componentRef.current.contains(event.target)) {
-        if (isExpanded && !taskTitle.trim()) {
-          setIsExpanded(false);
-        }
+      if (isExpanded && containerRef.current && !containerRef.current.contains(event.target)) {
+        setIsExpanded(false);
+        setTaskText('');
       }
     };
-    
+
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isExpanded, taskTitle]);
-  
+  }, [isExpanded]);
+
+  // Focus input when expanded
+  useEffect(() => {
+    if (isExpanded && taskInputRef.current) {
+      taskInputRef.current.focus();
+    }
+  }, [isExpanded]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    if (taskTitle.trim()) {
-      const newTask = {
-        id: Date.now(),
-        title: taskTitle,
-        notes: taskNotes,
-        list: selectedList,
-        dueDate: dueDate || null,
-        tags: [...tags],
-        reminder: reminder,
-        completed: false,
-        createdAt: new Date(),
-      };
-      
-      onAddTask(newTask);
-      
-      // Reset form
-      setTaskTitle('');
-      setTaskNotes('');
-      setDueDate('');
-      setTags([]);
-      setReminder(null);
-      
-      // Collapse if needed
+    if (taskText.trim()) {
+      onAddTask(taskText);
+      setTaskText('');
       setIsExpanded(false);
     }
   };
-  
-  // Format date to display in a friendly way
-  const formatDate = (dateString) => {
-    if (!dateString) return '';
-    
-    const date = new Date(dateString);
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    
-    if (date.toDateString() === today.toDateString()) {
-      return 'Today';
-    } else if (date.toDateString() === tomorrow.toDateString()) {
-      return 'Tomorrow';
-    } else {
-      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      handleSubmit(e);
+    } else if (e.key === 'Escape') {
+      setIsExpanded(false);
+      setTaskText('');
     }
   };
-  
-  const handleAddTag = (e) => {
-    if (e.key === 'Enter' && e.target.value.trim()) {
-      setTags([...tags, e.target.value.trim()]);
-      e.target.value = '';
-    }
-  };
-  
-  const handleRemoveTag = (tagToRemove) => {
-    setTags(tags.filter(tag => tag !== tagToRemove));
-  };
-  
+
+  if (!isExpanded) {
+    return (
+      <div 
+        className="add-task-container" 
+        onClick={() => setIsExpanded(true)}
+        ref={containerRef}
+      >
+        <div className="add-task-simple">
+          <span className="task-icon">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="18" height="18" rx="4" fill="#F0F0F0" />
+              <path d="M9 5V13M5 9H13" stroke="#777777" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+          </span>
+          <span className="task-placeholder">Add task</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div 
-      className={`add-task-component ${isExpanded ? 'expanded' : ''}`} 
-      ref={componentRef}
+      className="add-task-container expanded"
+      ref={containerRef}
     >
-      <form onSubmit={handleSubmit}>
-        <div className="add-task-input-row">
-          <div className="add-icon">
-            <FontAwesomeIcon icon={faPlus} />
-          </div>
-          
-          <input
-            ref={inputRef}
-            type="text"
-            placeholder="Add a task"
-            value={taskTitle}
-            onChange={(e) => setTaskTitle(e.target.value)}
-            onClick={() => !isExpanded && setIsExpanded(true)}
-            className="task-title-input"
-          />
-          
-          {isExpanded && (
-            <button type="submit" className="add-task-submit">
-              <FontAwesomeIcon icon={faCheck} />
-            </button>
-          )}
-        </div>
-        
-        {isExpanded && (
-          <div className="expanded-content">
-            <textarea
-              placeholder="Add notes"
-              value={taskNotes}
-              onChange={(e) => setTaskNotes(e.target.value)}
-              className="task-notes"
-            />
-            
-            <div className="task-options">
-              <div className="task-list-select">
-                <select 
-                  value={selectedList} 
-                  onChange={(e) => setSelectedList(e.target.value)}
-                >
-                  {listOptions.length > 0 ? (
-                    listOptions.map(list => (
-                      <option key={list} value={list}>{list}</option>
-                    ))
-                  ) : (
-                    <option value="My day">My day</option>
-                  )}
-                </select>
-              </div>
-              
-              <div className="task-date-picker">
-                <FontAwesomeIcon icon={faCalendarAlt} />
-                <input 
-                  type="date" 
-                  value={dueDate}
-                  onChange={(e) => setDueDate(e.target.value)}
-                />
-                {dueDate && (
-                  <span className="date-display">
-                    {formatDate(dueDate)}
-                    <button 
-                      type="button" 
-                      onClick={() => setDueDate('')}
-                      className="clear-date"
-                    >
-                      <FontAwesomeIcon icon={faTimes} />
-                    </button>
-                  </span>
-                )}
-              </div>
-              
-              <div className="task-reminder">
-                <FontAwesomeIcon icon={faBell} />
-                <select 
-                  value={reminder || ''} 
-                  onChange={(e) => setReminder(e.target.value || null)}
-                >
-                  <option value="">No reminder</option>
-                  <option value="today">Later today</option>
-                  <option value="tomorrow">Tomorrow</option>
-                  <option value="nextWeek">Next week</option>
-                </select>
-              </div>
-            </div>
-            
-            <div className="task-tags">
-              <FontAwesomeIcon icon={faTag} />
-              <div className="tags-container">
-                {tags.map((tag, index) => (
-                  <div key={index} className="tag">
-                    {tag}
-                    <button 
-                      type="button" 
-                      onClick={() => handleRemoveTag(tag)}
-                      className="remove-tag"
-                    >
-                      <FontAwesomeIcon icon={faTimes} />
-                    </button>
-                  </div>
-                ))}
-                <input 
-                  type="text" 
-                  placeholder="Add tag..." 
-                  onKeyDown={handleAddTag}
-                  className="tag-input"
-                />
-              </div>
-            </div>
-          </div>
-        )}
+      <form onSubmit={handleSubmit} className="add-task-form">
+        <input
+          type="text"
+          value={taskText}
+          onChange={(e) => setTaskText(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder="Enter task title"
+          className="task-input-expanded"
+          ref={taskInputRef}
+        />
+        <button 
+          type="button" 
+          className="collapse-button"
+          onClick={() => setIsExpanded(false)}
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 10L8 5L13 10" stroke="#777777" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
+        </button>
       </form>
     </div>
   );

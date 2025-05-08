@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 import Sidebar from './components/Sidebar/Sidebar'
-import MyDay from './components/MyDay/MyDay'
+import MyDay from './pages/MyDay/MyDay'
 import BackgroundImage from './components/BackgroundImage/BackgroundImage'
 
 function App() {
