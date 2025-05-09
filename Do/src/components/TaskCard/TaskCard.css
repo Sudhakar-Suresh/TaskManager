@@ -1,0 +1,161 @@
+.task-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background-color: rgba(233, 236, 229, 0.95);
+  border-radius: 8px;
+  margin-bottom: 8px;
+  min-height: 64px;
+  transition: background-color 0.2s ease;
+  position: relative;
+  backdrop-filter: blur(8px);
+  z-index: 1;
+}
+
+.task-card:hover {
+  z-index: 2;
+}
+
+.task-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.task-checkbox {
+  display: flex;
+  align-items: center;
+}
+
+.task-checkbox input[type="checkbox"] {
+  display: none;
+}
+
+.task-checkbox label {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+  background-color: transparent;
+}
+
+.task-checkbox input[type="checkbox"]:checked + label {
+  background-color: #635fc7;
+  border-color: #635fc7;
+}
+
+.task-checkbox input[type="checkbox"]:checked + label::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 3px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.task-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.task-title {
+  font-size: 14px;
+  color: #333;
+  font-weight: 400;
+}
+
+.task-list-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #666;
+  font-size: 12px;
+}
+
+.list-icon {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.list-name {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.task-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.action-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 16px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.action-button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: rgba(0, 0, 0, 0.7);
+}
+
+/* Container for the tasks */
+.tasks-section {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px 0;
+}
+
+/* Add to existing styles */
+.menu-button {
+  position: relative;
+}
+
+.menu-button.active {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.menu-button:focus {
+  outline: none;
+}
+
+.task-reminder {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 12px;
+  padding: 2px 8px;
+  background-color: rgba(0, 122, 255, 0.1);
+  border-radius: 4px;
+  font-size: 12px;
+  color: #007AFF;
+}
+
+.reminder-icon {
+  font-size: 12px;
+}
+
+.recurring-indicator {
+  font-size: 12px;
+  margin-left: 2px;
+} 

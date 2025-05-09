@@ -1,0 +1,248 @@
+.reminder-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.reminder-popup {
+  background: white;
+  border-radius: 16px;
+  width: 360px;
+  overflow: hidden;
+}
+
+.reminder-header {
+  text-align: center;
+  padding: 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.reminder-header h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.reminder-content {
+  padding: 20px;
+}
+
+.date-time-inputs {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.input-group {
+  flex: 1;
+  position: relative;
+}
+
+.input-group label {
+  display: block;
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  background: #f8f8f8;
+}
+
+.calendar-container {
+  margin-bottom: 16px;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.calendar-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.calendar-nav {
+  display: flex;
+  gap: 12px;
+}
+
+.calendar-nav button {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #666;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.calendar-grid {
+  margin-bottom: 16px;
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.weekdays span {
+  font-size: 12px;
+  color: #666;
+  padding: 4px;
+}
+
+.days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  justify-items: center;
+}
+
+.day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  width: 32px;
+  margin: 2px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.day:hover:not(.prev-month):not(.next-month) {
+  background-color: #f0f0f0;
+}
+
+.day.selected {
+  background-color: #007AFF;
+  color: white;
+}
+
+.day.prev-month,
+.day.next-month {
+  color: #ccc;
+  cursor: default;
+}
+
+.quick-options {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.quick-options button {
+  padding: 8px 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background: white;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  text-align: left;
+}
+
+.quick-options button:hover {
+  background-color: #f8f8f8;
+}
+
+.recurring-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.recurring-btn span {
+  font-size: 16px;
+}
+
+.recurring-btn.active {
+  background-color: #007AFF;
+  color: white;
+  border-color: #007AFF;
+}
+
+.reminder-footer {
+  display: flex;
+  border-top: 1px solid #eee;
+}
+
+.reminder-footer button {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  background: none;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  color: #666;
+  border-right: 1px solid #eee;
+}
+
+.set-btn {
+  color: #007AFF;
+}
+
+.set-btn:hover {
+  background-color: #f8f8f8;
+}
+
+.time-input {
+  cursor: pointer;
+}
+
+.time-picker {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 4px;
+}
+
+.time-option {
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+}
+
+.time-option:hover {
+  background-color: #f5f5f5;
+}
+
+.time-option.selected {
+  background-color: #007AFF;
+  color: white;
+} 

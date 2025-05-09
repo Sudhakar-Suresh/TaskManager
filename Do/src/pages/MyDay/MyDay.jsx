@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import AddTask from '../../components/AddTask/AddTask';
 import BackgroundImage from '../../components/BackgroundImage/BackgroundImage';
+import TaskCard from '../../components/TaskCard/TaskCard';
 import './MyDay.css';
 
 const MyDay = () => {
@@ -58,7 +59,12 @@ const MyDay = () => {
         </div>
       </div>
       
-      {/* Task list would go here */}
+      {/* Task list section */}
+      <div className="tasks-section">
+        {tasks.map(task => (
+          <TaskCard key={task.id} task={task} />
+        ))}
+      </div>
       
       <AddTask onAddTask={handleAddTask} />
       <BackgroundImage />
