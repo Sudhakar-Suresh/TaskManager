@@ -6,7 +6,7 @@ import TaskDropdown from '../TaskDropdown/TaskDropdown';
 import ReminderPopup from '../ReminderPopup/ReminderPopup';
 import './TaskCard.css';
 
-const TaskCard = ({ task }) => {
+const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
@@ -47,28 +47,57 @@ const TaskCard = ({ task }) => {
   };
 
   const handleReminderSave = (reminderData) => {
-    setReminder(reminderData);
+    const updatedReminder = {
+      ...reminderData,
+      date: reminderData.date // Keep as ISO string
+    };
+    setReminder(updatedReminder);
+    onUpdate({
+      ...task,
+      reminder: updatedReminder
+    });
     setReminderPopupOpen(false);
   };
 
   const formatReminderDate = (dateString) => {
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
+    if (!dateString) return '';
+
+    const reminderDate = new Date(dateString);
+    const now = new Date();
+    const tomorrow = new Date(now);
+    tomorrow.setDate(now.getDate() + 1);
     
-    const [day, month, year] = dateString.split('.');
-    const reminderDate = new Date(year, month - 1, day);
-    
-    if (reminderDate.toDateString() === today.toDateString()) {
-      return 'Today';
-    } else if (reminderDate.toDateString() === tomorrow.toDateString()) {
-      return 'Tomorrow';
-    } else {
-      return reminderDate.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric'
-      });
+    // Format time
+    const timeString = reminderDate.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    });
+
+    // Check if it's today or tomorrow
+    if (isSameDay(reminderDate, now)) {
+      return `Today, ${timeString}`;
+    } else if (isSameDay(reminderDate, tomorrow)) {
+      return `Tomorrow, ${timeString}`;
     }
+
+    // If it's within 7 days, show the day name
+    const diffDays = Math.floor((reminderDate - now) / (1000 * 60 * 60 * 24));
+    if (diffDays < 7 && diffDays > -1) {
+      return `${reminderDate.toLocaleDateString('en-US', { weekday: 'long' })}, ${timeString}`;
+    }
+
+    // Otherwise show the full date
+    return `${reminderDate.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: reminderDate.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
+    })}, ${timeString}`;
+  };
+
+  const handleCheckboxChange = (e) => {
+    e.stopPropagation();
+    onToggleComplete(task.id);
   };
 
   return (
@@ -80,7 +109,12 @@ const TaskCard = ({ task }) => {
       >
         <div className="task-left">
           <div className="task-checkbox">
-            <input type="checkbox" id={`task-${task.id}`} checked={task.completed} />
+            <input 
+              type="checkbox" 
+              id={`task-${task.id}`} 
+              checked={task.completed}
+              onChange={handleCheckboxChange}
+            />
             <label htmlFor={`task-${task.id}`}></label>
           </div>
           <div className="task-content">

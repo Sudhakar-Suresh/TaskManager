@@ -1,95 +1,183 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ReminderPopup.css';
 
 const ReminderPopup = ({ isOpen, onClose, onSave, initialDate }) => {
-  const [selectedDate, setSelectedDate] = useState(initialDate || '5.8.2025');
-  const [selectedTime, setSelectedTime] = useState('4:12 PM');
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedTime, setSelectedTime] = useState('');
   const [showTimePicker, setShowTimePicker] = useState(false);
-  const [currentMonth, setCurrentMonth] = useState(new Date(2025, 4)); // May 2025
+  const [currentMonth, setCurrentMonth] = useState(new Date());
   const [isRecurring, setIsRecurring] = useState(false);
 
-  const timeOptions = [
-    "12:00 AM", "1:00 AM", "2:00 AM", "3:00 AM", "4:00 AM", "5:00 AM",
-    "6:00 AM", "7:00 AM", "8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM",
-    "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM",
-    "6:00 PM", "7:00 PM", "8:00 PM", "9:00 PM", "10:00 PM", "11:00 PM"
-  ];
+  useEffect(() => {
+    if (isOpen) {
+      let dateToUse;
+      if (initialDate) {
+        dateToUse = new Date(initialDate);
+      } else {
+        dateToUse = new Date();
+        dateToUse.setMinutes(Math.ceil(dateToUse.getMinutes() / 30) * 30);
+        dateToUse.setSeconds(0);
+        dateToUse.setMilliseconds(0);
+      }
+      
+      setSelectedDate(dateToUse);
+      setSelectedTime(formatTime(dateToUse));
+      setCurrentMonth(new Date(dateToUse.getFullYear(), dateToUse.getMonth(), 1));
+      setIsRecurring(false);
+    }
+  }, [isOpen, initialDate]);
 
-  if (!isOpen) return null;
+  const timeOptions = generateTimeOptions();
+
+  function generateTimeOptions() {
+    const options = [];
+    for (let i = 0; i < 24; i++) {
+      for (let j = 0; j < 60; j += 30) {
+        const date = new Date();
+        date.setHours(i, j, 0, 0);
+        options.push(formatTime(date));
+      }
+    }
+    return options;
+  }
+
+  function formatTime(date) {
+    return date.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    });
+  }
+
+  function formatDateForInput(date) {
+    if (!date) return '';
+    return date.toLocaleDateString('en-US', {
+      month: 'numeric',
+      day: 'numeric',
+      year: 'numeric'
+    });
+  }
 
   const handleTimeSelect = (time) => {
     setSelectedTime(time);
     setShowTimePicker(false);
+
+    // Update the full date with the new time
+    if (selectedDate) {
+      const [hours, minutes] = parseTime(time);
+      const newDate = new Date(selectedDate);
+      newDate.setHours(hours, minutes, 0, 0);
+      setSelectedDate(newDate);
+    }
+  };
+
+  const parseTime = (timeStr) => {
+    const [time, period] = timeStr.split(' ');
+    let [hours, minutes] = time.split(':').map(Number);
+    
+    if (period === 'PM' && hours !== 12) {
+      hours += 12;
+    } else if (period === 'AM' && hours === 12) {
+      hours = 0;
+    }
+    
+    return [hours, minutes];
   };
 
   const handleDayClick = (day) => {
-    const newDate = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
-    setSelectedDate(newDate.toLocaleDateString('en-US', {
-      day: 'numeric',
-      month: 'numeric',
-      year: 'numeric'
-    }).replace(/\//g, '.'));
+    const newDate = new Date(selectedDate || new Date());
+    newDate.setFullYear(currentMonth.getFullYear());
+    newDate.setMonth(currentMonth.getMonth());
+    newDate.setDate(day);
+    
+    // Preserve the current time
+    if (selectedTime) {
+      const [hours, minutes] = parseTime(selectedTime);
+      newDate.setHours(hours, minutes, 0, 0);
+    }
+    
+    setSelectedDate(newDate);
   };
 
   const handleQuickSelect = (option) => {
-    const today = new Date();
-    let newDate;
+    const now = new Date();
+    let newDate = new Date(now);
 
     switch(option) {
       case 'tomorrow':
-        newDate = new Date(today.setDate(today.getDate() + 1));
+        newDate.setDate(now.getDate() + 1);
         break;
       case 'nextWeek':
-        newDate = new Date(today.setDate(today.getDate() + 7));
+        newDate.setDate(now.getDate() + 7);
         break;
       case 'someday':
-        newDate = new Date(today.setDate(today.getDate() + 14));
+        newDate.setDate(now.getDate() + 14);
         break;
       default:
         return;
     }
 
-    setSelectedDate(newDate.toLocaleDateString('en-US', {
-      day: 'numeric',
-      month: 'numeric',
-      year: 'numeric'
-    }).replace(/\//g, '.'));
-    setCurrentMonth(newDate);
+    // Preserve the current time or set to next 30-minute interval
+    if (selectedTime) {
+      const [hours, minutes] = parseTime(selectedTime);
+      newDate.setHours(hours, minutes, 0, 0);
+    } else {
+      newDate.setMinutes(Math.ceil(newDate.getMinutes() / 30) * 30);
+      newDate.setSeconds(0);
+      newDate.setMilliseconds(0);
+      setSelectedTime(formatTime(newDate));
+    }
+
+    setSelectedDate(newDate);
+    setCurrentMonth(new Date(newDate.getFullYear(), newDate.getMonth(), 1));
   };
 
   const handleSave = () => {
+    if (!selectedDate) return;
+    
     onSave({
-      date: selectedDate,
-      time: selectedTime,
+      date: selectedDate.toISOString(),
       isRecurring
     });
     onClose();
   };
 
   const generateCalendarDays = () => {
+    if (!currentMonth) return [];
+
     const days = [];
     const firstDay = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
     const lastDay = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0);
     
     // Previous month days
-    const prevMonthDays = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
+    const firstDayOfWeek = firstDay.getDay() || 7; // Convert Sunday (0) to 7
+    const prevMonthDays = firstDayOfWeek - 1;
     const prevMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 0);
+    
     for (let i = prevMonthDays - 1; i >= 0; i--) {
+      const date = new Date(prevMonth);
+      date.setDate(prevMonth.getDate() - i);
       days.push(
         <span key={`prev-${i}`} className="day prev-month">
-          {prevMonth.getDate() - i}
+          {date.getDate()}
         </span>
       );
     }
     
     // Current month days
     for (let day = 1; day <= lastDay.getDate(); day++) {
-      const dateStr = `${day}.${currentMonth.getMonth() + 1}.${currentMonth.getFullYear()}`;
-      const isSelected = selectedDate === dateStr;
+      const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
+      const isSelected = selectedDate && 
+        date.getDate() === selectedDate.getDate() &&
+        date.getMonth() === selectedDate.getMonth() &&
+        date.getFullYear() === selectedDate.getFullYear();
+      
+      const isToday = isCurrentDay(date);
+      
       days.push(
         <span 
-          key={day} 
-          className={`day ${isSelected ? 'selected' : ''}`}
+          key={`current-${day}`}
+          className={`day ${isSelected ? 'selected' : ''} ${isToday ? 'today' : ''}`}
           onClick={() => handleDayClick(day)}
         >
           {day}
@@ -98,11 +186,15 @@ const ReminderPopup = ({ isOpen, onClose, onSave, initialDate }) => {
     }
     
     // Next month days
-    const remainingDays = 42 - days.length; // 6 rows × 7 days = 42
+    const remainingDays = 42 - days.length;
+    const nextMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1);
+    
     for (let i = 1; i <= remainingDays; i++) {
+      const date = new Date(nextMonth);
+      date.setDate(i);
       days.push(
         <span key={`next-${i}`} className="day next-month">
-          {i}
+          {date.getDate()}
         </span>
       );
     }
@@ -110,11 +202,21 @@ const ReminderPopup = ({ isOpen, onClose, onSave, initialDate }) => {
     return days;
   };
 
+  function isCurrentDay(date) {
+    const today = new Date();
+    return date.getDate() === today.getDate() &&
+           date.getMonth() === today.getMonth() &&
+           date.getFullYear() === today.getFullYear();
+  }
+
+  if (!isOpen) return null;
+
   return (
     <div className="reminder-overlay">
       <div className="reminder-popup">
         <div className="reminder-header">
           <h2>Reminder</h2>
+          <button className="close-button" onClick={onClose}>&times;</button>
         </div>
 
         <div className="reminder-content">
@@ -123,7 +225,7 @@ const ReminderPopup = ({ isOpen, onClose, onSave, initialDate }) => {
               <label>DATE</label>
               <input 
                 type="text" 
-                value={selectedDate}
+                value={selectedDate ? formatDateForInput(selectedDate) : ''}
                 readOnly
                 className="date-input"
               />
@@ -156,13 +258,22 @@ const ReminderPopup = ({ isOpen, onClose, onSave, initialDate }) => {
           <div className="calendar-container">
             <div className="calendar-header">
               <h3>
-                {currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                {currentMonth.toLocaleDateString('en-US', { 
+                  month: 'long',
+                  year: 'numeric'
+                })}
               </h3>
               <div className="calendar-nav">
-                <button onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1))}>
+                <button 
+                  onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1))}
+                  className="nav-button"
+                >
                   &lt;
                 </button>
-                <button onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1))}>
+                <button 
+                  onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1))}
+                  className="nav-button"
+                >
                   &gt;
                 </button>
               </div>
@@ -199,7 +310,7 @@ const ReminderPopup = ({ isOpen, onClose, onSave, initialDate }) => {
 
         <div className="reminder-footer">
           <button className="cancel-btn" onClick={onClose}>Cancel</button>
-          <button className="set-btn" onClick={handleSave}>Set</button>
+          <button className="save-btn" onClick={handleSave}>Save</button>
         </div>
       </div>
     </div>
