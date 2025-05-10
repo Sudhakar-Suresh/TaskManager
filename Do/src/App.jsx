@@ -62,7 +62,10 @@ function App() {
   const handleUpdateTask = (updatedTask) => {
     setTasks(prevTasks => 
       prevTasks.map(task => 
-        task.id === updatedTask.id ? updatedTask : task
+        task.id === updatedTask.id ? {
+          ...updatedTask,
+          list: updatedTask.list || task.list // Preserve or update list
+        } : task
       )
     );
   };

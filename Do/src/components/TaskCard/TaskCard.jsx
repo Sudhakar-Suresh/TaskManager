@@ -4,6 +4,7 @@ import { BsThreeDotsVertical, BsBell, BsPinAngle, BsPinAngleFill, BsCheck } from
 import { IoCloseOutline } from 'react-icons/io5';
 import TaskDropdown from '../TaskDropdown/TaskDropdown';
 import ReminderPopup from '../ReminderPopup/ReminderPopup';
+import ListPopup from '../ListPopup/ListPopup';
 import './TaskCard.css';
 
 const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete }) => {
@@ -16,6 +17,8 @@ const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete }) => {
   const cardRef = useRef(null);
   const [reminderPopupOpen, setReminderPopupOpen] = useState(false);
   const [reminder, setReminder] = useState(task.reminder || null);
+  const [isListPopupOpen, setIsListPopupOpen] = useState(false);
+  const [selectedList, setSelectedList] = useState('Personal');
 
   useEffect(() => {
     // Update reminder state when task changes
@@ -123,6 +126,16 @@ const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete }) => {
     }
   };
 
+  const handleListSelect = (listName) => {
+    setSelectedList(listName);
+    setIsListPopupOpen(false);
+    onUpdate({
+      ...task,
+      list: listName
+    });
+    setDropdownOpen(false);
+  };
+
   return (
     <>
       <div 
@@ -200,6 +213,8 @@ const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete }) => {
         position={dropdownPosition}
         onClose={() => setDropdownOpen(false)}
         onReminderClick={handleReminderClick}
+        onListClick={handleListSelect}
+        userLists={['Personal', 'Work', 'Grocery List']}
       />
       {reminderPopupOpen && (
         <ReminderPopup 
@@ -209,6 +224,12 @@ const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete }) => {
           initialDate={reminder?.date}
         />
       )}
+      <ListPopup
+        isOpen={isListPopupOpen}
+        onClose={() => setIsListPopupOpen(false)}
+        onListSelect={handleListSelect}
+        selectedList={selectedList}
+      />
     </>
   );
 };
