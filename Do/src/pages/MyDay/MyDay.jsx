@@ -9,7 +9,10 @@ const MyDay = ({
   onUpdateTask, 
   onDeleteTask, 
   onToggleComplete,
-  isCompletedView = false 
+  isCompletedView = false,
+  userLists = [],
+  onAddList,
+  listName
 }) => {
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -34,48 +37,41 @@ const MyDay = ({
   });
 
   return (
-    <div className="myday-container">
-      <div className="myday-header">
-        <h1>{isCompletedView ? 'Completed Tasks' : getGreeting() + ', Sudhakar'}<span className="dot">.</span></h1>
-        <p className="subtitle">
-          {isCompletedView ? 'All your completed tasks' : 'Time to make your own luck'}
-        </p>
-      </div>
-      
-      {!isCompletedView && (
-        <div className="calendar-section">
-          <div className="date-display">
+    <div className="my-day-container">
+      <div className="day-header">
+        <div className="greeting-section">
+          <h1>{listName || 'My day'}</h1>
+          <p>{getGreeting()}, Sudhakar</p>
+        </div>
+        
+        <div className="date-display">
+          <div className="date-box">
             <div className="day-name">{dayName}</div>
             <div className="date-number">{date}</div>
             <div className="month-name">{month}</div>
           </div>
-          <div className="calendar-info">
-            <p>Join video meetings with one tap</p>
-            <div className="calendar-buttons">
-              <button className="calendar-button google">
-                <span className="calendar-icon">📅</span> Connect Google Calendar
-              </button>
-              <button className="calendar-button outlook">
-                <span className="calendar-icon">📆</span> Connect Outlook Calendar
-              </button>
-            </div>
-          </div>
         </div>
-      )}
-      
-      <div className="tasks-section">
-        {sortedTasks.map(task => (
-          <TaskCard 
-            key={task.id} 
-            task={task}
-            onDelete={onDeleteTask}
-            onUpdate={onUpdateTask}
-            onToggleComplete={onToggleComplete}
-          />
-        ))}
       </div>
       
-      {!isCompletedView && <AddTask onAddTask={onAddTask} />}
+      <div className="tasks-section">
+        {!isCompletedView && (
+          <AddTask onAddTask={onAddTask} />
+        )}
+        
+        <div className="tasks-list">
+          {sortedTasks.map(task => (
+            <TaskCard 
+              key={task.id} 
+              task={task}
+              onDelete={onDeleteTask}
+              onUpdate={onUpdateTask}
+              onToggleComplete={onToggleComplete}
+              userLists={userLists}
+              onAddList={onAddList}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

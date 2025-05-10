@@ -8,7 +8,7 @@ import ListPopup from '../../List/ListPopup/ListPopup';
 import TagPopup from '../../TagPopup/TagPopup';
 import './TaskCard.css';
 
-const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete }) => {
+const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete, userLists = [], onAddList }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
@@ -309,6 +309,8 @@ const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete }) => {
           onClose={() => setIsListPopupOpen(false)}
           onListSelect={handleListSelect}
           selectedList={currentList}
+          userLists={userLists}
+          onAddList={onAddList}
         />
       )}
 

@@ -147,4 +147,63 @@
   top: auto !important;
   bottom: auto !important;
   transform: none !important;
+}
+
+.add-list-input-container {
+  padding: 8px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.add-list-input {
+  padding: 8px 12px;
+  border: 1px solid #E0E0E0;
+  border-radius: 6px;
+  font-size: 14px;
+  width: 100%;
+  transition: border-color 0.2s;
+}
+
+.add-list-input:focus {
+  border-color: #4285F4;
+  outline: none;
+}
+
+.add-list-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.add-list-save-btn, .add-list-cancel-btn {
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 13px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.add-list-save-btn {
+  background-color: #4285F4;
+  color: white;
+}
+
+.add-list-save-btn:hover {
+  background-color: #3367D6;
+}
+
+.add-list-save-btn:disabled {
+  background-color: #A9D1F8;
+  cursor: not-allowed;
+}
+
+.add-list-cancel-btn {
+  background-color: #F1F3F4;
+  color: #5F6368;
+}
+
+.add-list-cancel-btn:hover {
+  background-color: #E8EAED;
 } 

@@ -7,7 +7,10 @@ import BackgroundImage from './components/BackgroundImage/BackgroundImage'
 
 function App() {
   const [activePage, setActivePage] = useState('My day')
-  const [userLists, setUserLists] = useState([])
+  const [userLists, setUserLists] = useState(() => {
+    const savedLists = localStorage.getItem('userLists');
+    return savedLists ? JSON.parse(savedLists) : ['Personal', 'Work', 'Grocery List'];
+  });
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false)
   const [tasks, setTasks] = useState(() => {
     const savedTasks = localStorage.getItem('tasks');
@@ -19,6 +22,11 @@ function App() {
     localStorage.setItem('tasks', JSON.stringify(tasks));
     updateTaskCounts();
   }, [tasks]);
+  
+  // Save userLists to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('userLists', JSON.stringify(userLists));
+  }, [userLists]);
 
   const [taskCounts, setTaskCounts] = useState({
     myDay: 0,
@@ -54,7 +62,8 @@ function App() {
       createdAt: new Date().toISOString(),
       completedAt: null,
       isPinned: false,
-      reminder: null
+      reminder: null,
+      list: 'Personal'
     };
     setTasks(prevTasks => [...prevTasks, newTask]);
   };
@@ -69,17 +78,6 @@ function App() {
         } : task
       )
     );
-
-    // Save to localStorage
-    localStorage.setItem('tasks', JSON.stringify(
-      tasks.map(task => 
-        task.id === updatedTask.id ? {
-          ...task,
-          ...updatedTask,
-          tags: updatedTask.tags || []
-        } : task
-      )
-    ));
   };
 
   const handleDeleteTask = (taskId) => {
@@ -91,7 +89,9 @@ function App() {
   };
 
   const handleAddList = (listName) => {
-    setUserLists(prev => [...prev, listName]);
+    if (!userLists.includes(listName)) {
+      setUserLists(prev => [...prev, listName]);
+    }
   };
 
   const handleListSelect = (listName) => {
@@ -112,6 +112,8 @@ function App() {
             onUpdateTask={handleUpdateTask}
             onDeleteTask={handleDeleteTask}
             onToggleComplete={handleToggleComplete}
+            userLists={userLists}
+            onAddList={handleAddList}
           />
         );
       case 'Completed':
@@ -121,10 +123,24 @@ function App() {
             onUpdateTask={handleUpdateTask}
             onDeleteTask={handleDeleteTask}
             onToggleComplete={handleToggleComplete}
+            userLists={userLists}
+            onAddList={handleAddList}
           />
         );
       default:
-        return <div>Select a page</div>;
+        // Show filtered tasks for the selected list
+        return (
+          <MyDay 
+            tasks={tasks.filter(task => !task.completed && task.list === activePage)}
+            onAddTask={handleAddTask}
+            onUpdateTask={handleUpdateTask}
+            onDeleteTask={handleDeleteTask}
+            onToggleComplete={handleToggleComplete}
+            userLists={userLists}
+            onAddList={handleAddList}
+            listName={activePage}
+          />
+        );
     }
   };
 
