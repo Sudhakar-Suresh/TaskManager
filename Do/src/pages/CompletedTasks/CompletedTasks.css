@@ -1,0 +1,102 @@
+.completed-tasks-container {
+  padding: 24px;
+  height: 100%;
+  overflow-y: auto;
+  background-color: white;
+}
+
+.completed-tasks-header {
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.completed-tasks-header h1 {
+  font-size: 32px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.completed-tasks-header .dot {
+  color: #007AFF;
+}
+
+.completed-tasks-header .subtitle {
+  font-size: 16px;
+  color: #666;
+  margin: 8px 0;
+}
+
+.completed-count {
+  font-size: 14px;
+  color: #007AFF;
+  background-color: rgba(0, 122, 255, 0.1);
+  padding: 4px 12px;
+  border-radius: 16px;
+  display: inline-block;
+  margin-top: 8px;
+}
+
+.completed-tasks-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.completed-group {
+  animation: slideIn 0.3s ease-out;
+}
+
+.date-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  margin-bottom: 8px;
+}
+
+.date-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.task-count {
+  font-size: 12px;
+  color: #666;
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 4px 8px;
+  border-radius: 12px;
+}
+
+.tasks-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Empty state styles */
+.completed-tasks-container:empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.completed-tasks-container:empty::after {
+  content: 'No completed tasks yet';
+  color: #666;
+  font-size: 16px;
+} 

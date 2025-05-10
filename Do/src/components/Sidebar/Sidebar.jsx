@@ -195,6 +195,10 @@ const Sidebar = ({ onPageChange, onAddList, userLists = [], activeItem = 'My day
     }
   };
 
+  const handleCompletedClick = () => {
+    onPageChange('Completed');
+  };
+
   return (
     <>
       {/* Floating settings icon that's always visible */}
@@ -281,7 +285,7 @@ const Sidebar = ({ onPageChange, onAddList, userLists = [], activeItem = 'My day
             
             <li 
               className={`nav-item ${activeItem === 'Completed tasks' ? 'active' : ''}`}
-              onClick={() => handleItemClick('Completed tasks')}
+              onClick={handleCompletedClick}
               onMouseEnter={() => handleItemHover('book')}
             >
               <div className="nav-icon lottie-icon" ref={bookRef}></div>

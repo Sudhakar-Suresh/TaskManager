@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import './App.css'
 import Sidebar from './components/Sidebar/Sidebar'
 import MyDay from './pages/MyDay/MyDay'
+import CompletedTasks from './pages/CompletedTasks/CompletedTasks'
 import BackgroundImage from './components/BackgroundImage/BackgroundImage'
 
 function App() {
@@ -25,12 +26,24 @@ function App() {
   });
 
   const updateTaskCounts = () => {
-    const myDayCount = tasks.filter(task => !task.completed).length;
-    const completedCount = tasks.filter(task => task.completed).length;
     setTaskCounts({
-      myDay: myDayCount,
-      completed: completedCount
+      myDay: tasks.filter(task => !task.completed).length,
+      completed: tasks.filter(task => task.completed).length
     });
+  };
+
+  const handleToggleComplete = (taskId) => {
+    setTasks(prevTasks => 
+      prevTasks.map(task => 
+        task.id === taskId 
+          ? { 
+              ...task, 
+              completed: !task.completed,
+              completedAt: !task.completed ? new Date().toISOString() : null
+            }
+          : task
+      )
+    );
   };
 
   const handleAddTask = (taskText) => {
@@ -38,9 +51,10 @@ function App() {
       id: Date.now(),
       title: taskText,
       completed: false,
+      createdAt: new Date().toISOString(),
+      completedAt: null,
       isPinned: false,
-      reminder: null,
-      createdAt: new Date().toISOString()
+      reminder: null
     };
     setTasks(prevTasks => [...prevTasks, newTask]);
   };
@@ -55,16 +69,6 @@ function App() {
 
   const handleDeleteTask = (taskId) => {
     setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
-  };
-
-  const handleToggleComplete = (taskId) => {
-    setTasks(prevTasks => 
-      prevTasks.map(task => 
-        task.id === taskId 
-          ? { ...task, completed: !task.completed }
-          : task
-      )
-    );
   };
 
   const handlePageChange = (page) => {
@@ -97,13 +101,11 @@ function App() {
         );
       case 'Completed':
         return (
-          <MyDay 
+          <CompletedTasks 
             tasks={tasks.filter(task => task.completed)}
-            onAddTask={handleAddTask}
             onUpdateTask={handleUpdateTask}
             onDeleteTask={handleDeleteTask}
             onToggleComplete={handleToggleComplete}
-            isCompletedView={true}
           />
         );
       default:
