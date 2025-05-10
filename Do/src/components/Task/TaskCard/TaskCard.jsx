@@ -6,6 +6,7 @@ import TaskDropdown from '../TaskDropdown/TaskDropdown';
 import ReminderPopup from '../../ReminderPopup/ReminderPopup';
 import ListPopup from '../../List/ListPopup/ListPopup';
 import TagPopup from '../../TagPopup/TagPopup';
+import TaskExpandedPopup from '../TaskExpandedPopup/TaskExpandedPopup';
 import './TaskCard.css';
 
 const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete, userLists = [], onAddList }) => {
@@ -20,6 +21,7 @@ const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete, userLists = [], 
   const [currentList, setCurrentList] = useState(task.list || 'Personal');
   const [selectedTags, setSelectedTags] = useState(task.tags || []);
   const [showTagPopup, setShowTagPopup] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   const menuButtonRef = useRef(null);
   const dropdownRef = useRef(null);
   const cardRef = useRef(null);
@@ -240,6 +242,17 @@ const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete, userLists = [], 
     setShowTagPopup(false);
   };
 
+  const handleCardClick = (e) => {
+    // Don't expand if clicking checkbox or action buttons
+    if (
+      e.target.closest('.task-checkbox') ||
+      e.target.closest('.task-actions')
+    ) {
+      return;
+    }
+    setIsExpanded(true);
+  };
+
   console.log("List popup state:", isListPopupOpen);
 
   return (
@@ -251,6 +264,7 @@ const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete, userLists = [], 
                    ${task.completed ? 'completed' : ''}`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => !dropdownOpen && setIsHovered(false)}
+        onClick={handleCardClick}
       >
         <div className="task-left">
           <div className="task-checkbox">
@@ -379,6 +393,16 @@ const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete, userLists = [], 
           selectedTags={selectedTags}
         />
       )}
+
+      <TaskExpandedPopup
+        isOpen={isExpanded}
+        onClose={() => setIsExpanded(false)}
+        task={task}
+        onUpdate={onUpdate}
+        onDelete={onDelete}
+        currentList={currentList}
+        selectedTags={selectedTags}
+      />
     </>
   );
 };
