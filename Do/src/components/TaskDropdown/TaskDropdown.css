@@ -20,17 +20,29 @@
   font-size: 14px;
   color: #333;
   text-align: left;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .dropdown-item:hover {
   background-color: rgba(0, 0, 0, 0.04);
 }
 
+.dropdown-item.active {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.dropdown-item.active .dropdown-icon {
+  color: #007AFF;
+}
+
 .dropdown-icon {
   font-size: 16px;
   color: #666;
-  min-width: 16px;
+  transition: color 0.2s ease;
+}
+
+.dropdown-item:hover .dropdown-icon {
+  color: #007AFF;
 }
 
 /* Update the TaskCard component's menu button positioning */
@@ -145,8 +157,4 @@
 .arrow-icon {
   color: #999;
   font-size: 20px;
-}
-
-.dropdown-item.active {
-  background-color: rgba(0, 0, 0, 0.04);
 } 

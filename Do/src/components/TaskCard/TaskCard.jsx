@@ -36,7 +36,9 @@ const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete }) => {
   };
 
   const handlePinClick = (e) => {
-    e.stopPropagation();
+    if (e) {
+      e.stopPropagation();
+    }
     const newPinnedState = !isPinned;
     setIsPinned(newPinnedState);
     
@@ -213,7 +215,9 @@ const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete }) => {
         onClose={() => setDropdownOpen(false)}
         onReminderClick={handleReminderClick}
         onListClick={handleListSelect}
+        onPinClick={handlePinClick}
         selectedList={currentList}
+        isPinned={isPinned}
       />
       {reminderPopupOpen && (
         <ReminderPopup 
