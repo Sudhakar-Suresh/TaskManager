@@ -24,6 +24,17 @@ const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete, userLists = [], 
   const dropdownRef = useRef(null);
   const cardRef = useRef(null);
 
+  // Load tag definitions from localStorage to access colors
+  const [tagDefinitions, setTagDefinitions] = useState(() => {
+    const storedTags = localStorage.getItem('appTags');
+    return storedTags 
+      ? JSON.parse(storedTags)
+      : [
+          { id: 1, name: 'Priority', color: '#FFD700' },
+          { id: 2, name: 'new', color: '#FF7F50' }
+        ];
+  });
+
   useEffect(() => {
     // Update reminder state when task changes
     setReminder(task.reminder || null);
@@ -72,6 +83,37 @@ const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete, userLists = [], 
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isListPopupOpen]);
+
+  // Add this useEffect to keep tag definitions in sync with localStorage
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const storedTags = localStorage.getItem('appTags');
+      if (storedTags) {
+        setTagDefinitions(JSON.parse(storedTags));
+      }
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
+
+  // Helper function to get tag color
+  const getTagColor = (tagName) => {
+    const tag = tagDefinitions.find(t => t.name === tagName);
+    return tag ? tag.color : '#E0E0E0'; // Fallback to gray if not found
+  };
+
+  // Helper function to determine text color based on background color
+  const getContrastColor = (hexColor) => {
+    // If it's one of the known light colors that needs dark text
+    if (hexColor === '#FFD700' || hexColor === '#FFDE3B') {
+      return '#000000';
+    }
+    // For all other colors, use white text
+    return '#FFFFFF';
+  };
 
   const handleMenuClick = (e) => {
     e.stopPropagation();
@@ -236,19 +278,23 @@ const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete, userLists = [], 
               </div>
               {selectedTags.length > 0 && (
                 <div className="task-tags">
-                  {selectedTags.map(tag => (
-                    <span 
-                      key={tag}
-                      className="task-tag"
-                      style={{ 
-                        backgroundColor: tag === 'Priority' ? '#FFD700' : 
-                                       tag === 'new' ? '#FF7F50' : '#E0E0E0',
-                        color: tag === 'Priority' ? '#000' : '#fff'
-                      }}
-                    >
-                      {tag}
-                    </span>
-                  ))}
+                  {selectedTags.map(tag => {
+                    const tagColor = getTagColor(tag);
+                    const textColor = getContrastColor(tagColor);
+                    
+                    return (
+                      <span 
+                        key={tag}
+                        className="task-tag"
+                        style={{ 
+                          backgroundColor: tagColor,
+                          color: textColor
+                        }}
+                      >
+                        {tag}
+                      </span>
+                    );
+                  })}
                 </div>
               )}
               {task.reminder && (
