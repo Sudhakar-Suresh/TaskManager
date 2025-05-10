@@ -18,7 +18,7 @@ const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete }) => {
   const [reminderPopupOpen, setReminderPopupOpen] = useState(false);
   const [reminder, setReminder] = useState(task.reminder || null);
   const [isListPopupOpen, setIsListPopupOpen] = useState(false);
-  const [selectedList, setSelectedList] = useState('Personal');
+  const [currentList, setCurrentList] = useState(task.list || 'Personal');
 
   useEffect(() => {
     // Update reminder state when task changes
@@ -127,8 +127,7 @@ const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete }) => {
   };
 
   const handleListSelect = (listName) => {
-    setSelectedList(listName);
-    setIsListPopupOpen(false);
+    setCurrentList(listName);
     onUpdate({
       ...task,
       list: listName
@@ -168,7 +167,7 @@ const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete }) => {
             </div>
             <div className="task-info">
               <div className="task-list-info">
-                <span className="list-name">My lists &gt; Personal</span>
+                <span className="list-name">My lists &gt; {currentList}</span>
               </div>
               {task.reminder && (
                 <div className="task-date">
@@ -214,7 +213,7 @@ const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete }) => {
         onClose={() => setDropdownOpen(false)}
         onReminderClick={handleReminderClick}
         onListClick={handleListSelect}
-        userLists={['Personal', 'Work', 'Grocery List']}
+        selectedList={currentList}
       />
       {reminderPopupOpen && (
         <ReminderPopup 
@@ -228,7 +227,7 @@ const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete }) => {
         isOpen={isListPopupOpen}
         onClose={() => setIsListPopupOpen(false)}
         onListSelect={handleListSelect}
-        selectedList={selectedList}
+        selectedList={currentList}
       />
     </>
   );
