@@ -1,111 +1,92 @@
-import React, { useState } from 'react';
-import { BsBell, BsPerson } from 'react-icons/bs';
+import React, { forwardRef } from 'react';
+import { BsBell } from 'react-icons/bs';
 import { BiListUl } from 'react-icons/bi';
 import { HiHashtag } from 'react-icons/hi';
-import { BsPinAngle } from 'react-icons/bs';
-import { MdOutlineKeyboardArrowRight } from 'react-icons/md';
+import { BsPinAngle, BsPinAngleFill } from 'react-icons/bs';
 import './TaskDropdown.css';
 
-const TaskDropdown = ({ 
+const TaskDropdown = forwardRef(({ 
   isOpen, 
   position, 
-  onReminderClick, 
+  onClose,
+  onReminderClick,
+  onTagsClick,
   onListClick,
-  selectedList = 'Personal'
-}) => {
-  const [showListPopup, setShowListPopup] = useState(false);
-
+  onPinClick,
+  isPinned
+}, ref) => {
   if (!isOpen) return null;
 
-  const myLists = [
-    { id: 1, name: 'Personal' },
-    { id: 2, name: 'Work' },
-    { id: 3, name: 'Grocery List' }
-  ];
-
-  const handleListButtonClick = (e) => {
+  const handleTagClick = (e) => {
     e.stopPropagation();
-    setShowListPopup(!showListPopup);
+    if (onTagsClick) {
+      onTagsClick();
+    }
   };
 
-  const handleListSelect = (listName) => {
-    onListClick(listName);
-    setShowListPopup(false);
+  const handleReminderClick = (e) => {
+    e.stopPropagation();
+    if (onReminderClick) {
+      onReminderClick();
+    }
+  };
+
+  const handlePinClick = (e) => {
+    e.stopPropagation();
+    if (onPinClick) {
+      onPinClick();
+    }
+  };
+
+  const handleListClick = (e) => {
+    e.stopPropagation();
+    if (onListClick) {
+      onListClick();
+    }
   };
 
   return (
     <div 
+      ref={ref}
       className="task-dropdown"
       style={{
         top: `${position.top}px`,
         left: `${position.left}px`
       }}
+      onClick={e => e.stopPropagation()}
     >
       <button 
         className="dropdown-item" 
-        onClick={onReminderClick}
+        onClick={handleReminderClick}
       >
         <BsBell className="dropdown-icon" />
         <span>Reminder</span>
       </button>
       <button 
-        className={`dropdown-item ${showListPopup ? 'active' : ''}`}
-        onClick={handleListButtonClick}
+        className="dropdown-item"
+        onClick={handleListClick}
       >
         <BiListUl className="dropdown-icon" />
         <span>Lists</span>
       </button>
-      <button className="dropdown-item">
+      <button 
+        className="dropdown-item"
+        onClick={handleTagClick}
+      >
         <HiHashtag className="dropdown-icon" />
         <span>Tags</span>
       </button>
-      <button className="dropdown-item">
-        <BsPinAngle className="dropdown-icon" />
-        <span>Pin</span>
+      <button 
+        className={`dropdown-item ${isPinned ? 'active' : ''}`}
+        onClick={handlePinClick}
+      >
+        {isPinned ? <BsPinAngleFill className="dropdown-icon" /> : <BsPinAngle className="dropdown-icon" />}
+        <span>{isPinned ? 'Unpin' : 'Pin'}</span>
       </button>
-
-      {showListPopup && (
-        <div className="list-popup">
-          <div className="list-popup-header">
-            Move to...
-          </div>
-          
-          <div className="list-section">
-            <div className="section-title">
-              <span>My lists</span>
-              <button className="add-list-button">⊕</button>
-            </div>
-            {myLists.map(list => (
-              <button
-                key={list.id}
-                className={`list-item ${list.name === selectedList ? 'selected' : ''}`}
-                onClick={() => handleListSelect(list.name)}
-              >
-                <span className="list-name">{list.name}</span>
-                {list.name === selectedList && (
-                  <span className="check-icon">✓</span>
-                )}
-              </button>
-            ))}
-          </div>
-
-          <div className="list-section">
-            <div className="section-title">
-              <span>hio</span>
-              <BsPerson className="share-icon" />
-            </div>
-            <button className="list-item shared-item">
-              <div className="shared-item-left">
-                <span className="user-avatar">👤</span>
-                <span className="list-name">Hio</span>
-              </div>
-              <MdOutlineKeyboardArrowRight className="arrow-icon" />
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
-};
+});
+
+TaskDropdown.displayName = 'TaskDropdown';
 
 export default TaskDropdown; 

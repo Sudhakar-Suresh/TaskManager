@@ -63,11 +63,23 @@ function App() {
     setTasks(prevTasks => 
       prevTasks.map(task => 
         task.id === updatedTask.id ? {
+          ...task,
           ...updatedTask,
-          list: updatedTask.list || task.list // Preserve or update list
+          tags: updatedTask.tags || []
         } : task
       )
     );
+
+    // Save to localStorage
+    localStorage.setItem('tasks', JSON.stringify(
+      tasks.map(task => 
+        task.id === updatedTask.id ? {
+          ...task,
+          ...updatedTask,
+          tags: updatedTask.tags || []
+        } : task
+      )
+    ));
   };
 
   const handleDeleteTask = (taskId) => {

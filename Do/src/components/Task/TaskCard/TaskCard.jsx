@@ -2,9 +2,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import { BiPencil } from 'react-icons/bi';
 import { BsThreeDotsVertical, BsBell, BsPinAngle, BsPinAngleFill, BsCheck } from 'react-icons/bs';
 import { IoCloseOutline } from 'react-icons/io5';
-import TaskDropdown from '../../Task/TaskDropdown/TaskDropdown';
+import TaskDropdown from '../TaskDropdown/TaskDropdown';
 import ReminderPopup from '../../ReminderPopup/ReminderPopup';
 import ListPopup from '../../List/ListPopup/ListPopup';
+import TagPopup from '../../TagPopup/TagPopup';
 import './TaskCard.css';
 
 const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete }) => {
@@ -13,41 +14,83 @@ const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete }) => {
   const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
   const [isPinned, setIsPinned] = useState(task.isPinned || false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const menuButtonRef = useRef(null);
-  const cardRef = useRef(null);
   const [reminderPopupOpen, setReminderPopupOpen] = useState(false);
   const [reminder, setReminder] = useState(task.reminder || null);
   const [isListPopupOpen, setIsListPopupOpen] = useState(false);
   const [currentList, setCurrentList] = useState(task.list || 'Personal');
+  const [selectedTags, setSelectedTags] = useState(task.tags || []);
+  const [showTagPopup, setShowTagPopup] = useState(false);
+  const menuButtonRef = useRef(null);
+  const dropdownRef = useRef(null);
+  const cardRef = useRef(null);
 
   useEffect(() => {
     // Update reminder state when task changes
     setReminder(task.reminder || null);
   }, [task.reminder]);
 
+  // Close tag popup when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showTagPopup && !event.target.closest('.tag-popup')) {
+        setShowTagPopup(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showTagPopup]);
+
+  // Handle click outside to close dropdown
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownOpen && 
+          !menuButtonRef.current?.contains(event.target) && 
+          !dropdownRef.current?.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [dropdownOpen]);
+
+  // Handle click outside to close list popup
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (isListPopupOpen && !event.target.closest('.list-popup') && !event.target.closest('.task-dropdown')) {
+        setIsListPopupOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isListPopupOpen]);
+
   const handleMenuClick = (e) => {
     e.stopPropagation();
     const rect = menuButtonRef.current.getBoundingClientRect();
     setDropdownPosition({
       top: rect.bottom + 4,
-      left: rect.right - 180,
+      left: rect.left,
     });
     setDropdownOpen(!dropdownOpen);
   };
 
   const handlePinClick = (e) => {
-    e.stopPropagation();
+    if (e) {
+      e.stopPropagation();
+    }
     const newPinnedState = !isPinned;
     setIsPinned(newPinnedState);
+    setDropdownOpen(false);
     
-    // Add animation class
-    cardRef.current.classList.add(newPinnedState ? 'pin-animation' : 'unpin-animation');
-    
-    // Remove animation class after animation completes
-    setTimeout(() => {
-      cardRef.current.classList.remove(newPinnedState ? 'pin-animation' : 'unpin-animation');
-    }, 500);
-
     onUpdate({
       ...task,
       isPinned: newPinnedState
@@ -126,14 +169,36 @@ const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete }) => {
     }
   };
 
+  const handleListClick = () => {
+    console.log("List click handler called");
+    setDropdownOpen(false); // Close dropdown when opening list popup
+    setIsListPopupOpen(true);
+  };
+
   const handleListSelect = (listName) => {
     setCurrentList(listName);
     onUpdate({
       ...task,
       list: listName
     });
-    setDropdownOpen(false);
+    setIsListPopupOpen(false);
   };
+
+  const handleTagsClick = () => {
+    setDropdownOpen(false); // Close dropdown when opening tags
+    setShowTagPopup(true);
+  };
+
+  const handleTagsSave = (newTags) => {
+    setSelectedTags(newTags);
+    onUpdate({
+      ...task,
+      tags: newTags
+    });
+    setShowTagPopup(false);
+  };
+
+  console.log("List popup state:", isListPopupOpen);
 
   return (
     <>
@@ -169,6 +234,23 @@ const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete }) => {
               <div className="task-list-info">
                 <span className="list-name">My lists &gt; {currentList}</span>
               </div>
+              {selectedTags.length > 0 && (
+                <div className="task-tags">
+                  {selectedTags.map(tag => (
+                    <span 
+                      key={tag}
+                      className="task-tag"
+                      style={{ 
+                        backgroundColor: tag === 'Priority' ? '#FFD700' : 
+                                       tag === 'new' ? '#FF7F50' : '#E0E0E0',
+                        color: tag === 'Priority' ? '#000' : '#fff'
+                      }}
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
               {task.reminder && (
                 <div className="task-date">
                   <BsBell className="date-icon" />
@@ -207,14 +289,30 @@ const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete }) => {
           </div>
         )}
       </div>
+
       <TaskDropdown 
+        ref={dropdownRef}
         isOpen={dropdownOpen}
         position={dropdownPosition}
         onClose={() => setDropdownOpen(false)}
         onReminderClick={handleReminderClick}
-        onListClick={handleListSelect}
-        selectedList={currentList}
+        onListClick={handleListClick}
+        onTagsClick={handleTagsClick}
+        onPinClick={handlePinClick}
+        isPinned={isPinned}
       />
+
+      {/* List Popup */}
+      {isListPopupOpen && (
+        <ListPopup
+          isOpen={isListPopupOpen}
+          onClose={() => setIsListPopupOpen(false)}
+          onListSelect={handleListSelect}
+          selectedList={currentList}
+        />
+      )}
+
+      {/* Reminder Popup */}
       {reminderPopupOpen && (
         <ReminderPopup 
           isOpen={reminderPopupOpen}
@@ -223,12 +321,16 @@ const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete }) => {
           initialDate={reminder?.date}
         />
       )}
-      <ListPopup
-        isOpen={isListPopupOpen}
-        onClose={() => setIsListPopupOpen(false)}
-        onListSelect={handleListSelect}
-        selectedList={currentList}
-      />
+
+      {/* Tag Popup */}
+      {showTagPopup && (
+        <TagPopup
+          isOpen={showTagPopup}
+          onClose={() => setShowTagPopup(false)}
+          onSave={handleTagsSave}
+          selectedTags={selectedTags}
+        />
+      )}
     </>
   );
 };

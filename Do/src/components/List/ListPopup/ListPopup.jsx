@@ -1,9 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { IoPersonOutline } from 'react-icons/io5';
 import { MdOutlineKeyboardArrowRight } from 'react-icons/md';
+import { BsCheck2 } from 'react-icons/bs';
 import './ListPopup.css';
 
 const ListPopup = ({ isOpen, onClose, onListSelect, selectedList = 'Personal' }) => {
+  // Prevent scrolling of the background when popup is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const myLists = [
@@ -12,8 +23,19 @@ const ListPopup = ({ isOpen, onClose, onListSelect, selectedList = 'Personal' })
     { id: 3, name: 'Grocery List' }
   ];
 
+  const handleListClick = (listName) => {
+    onListSelect(listName);
+    onClose();
+  };
+
+  const handleOverlayClick = (e) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   return (
-    <div className="list-popup-overlay" onClick={onClose}>
+    <div className="list-popup-overlay" onClick={handleOverlayClick}>
       <div className="list-popup" onClick={e => e.stopPropagation()}>
         <div className="list-popup-header">
           Move to...
@@ -29,11 +51,11 @@ const ListPopup = ({ isOpen, onClose, onListSelect, selectedList = 'Personal' })
             <button
               key={list.id}
               className={`list-item ${list.name === selectedList ? 'selected' : ''}`}
-              onClick={() => onListSelect(list.name)}
+              onClick={() => handleListClick(list.name)}
             >
               <span className="list-name">{list.name}</span>
               {list.name === selectedList && (
-                <span className="check-icon">✓</span>
+                <BsCheck2 className="check-icon" />
               )}
             </button>
           ))}

@@ -426,4 +426,47 @@
   background: linear-gradient(to bottom, rgb(248, 248, 243), rgb(245, 245, 240));
   border-color: rgba(0, 0, 0, 0.15);
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+.task-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.task-tag {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Priority tag specific style */
+.task-tag[style*="FFD700"] {
+  color: #000000;
+}
+
+/* New tag specific style */
+.task-tag[style*="FF7F50"] {
+  color: #ffffff;
+}
+
+/* Default tag style */
+.task-tag[style*="E0E0E0"] {
+  color: #333333;
+}
+
+.task-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.task-list-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 } 
