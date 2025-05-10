@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { BsBell, BsPerson } from 'react-icons/bs';
 import { BiListUl } from 'react-icons/bi';
 import { HiHashtag } from 'react-icons/hi';
-import { BsPinAngle, BsPinAngleFill } from 'react-icons/bs';
+import { BsPinAngle } from 'react-icons/bs';
 import { MdOutlineKeyboardArrowRight } from 'react-icons/md';
 import './TaskDropdown.css';
 
@@ -11,9 +11,7 @@ const TaskDropdown = ({
   position, 
   onReminderClick, 
   onListClick,
-  onPinClick,
-  selectedList = 'Personal',
-  isPinned = false
+  selectedList = 'Personal'
 }) => {
   const [showListPopup, setShowListPopup] = useState(false);
 
@@ -33,11 +31,6 @@ const TaskDropdown = ({
   const handleListSelect = (listName) => {
     onListClick(listName);
     setShowListPopup(false);
-  };
-
-  const handlePinClick = (e) => {
-    e.stopPropagation();
-    onPinClick();
   };
 
   return (
@@ -66,12 +59,9 @@ const TaskDropdown = ({
         <HiHashtag className="dropdown-icon" />
         <span>Tags</span>
       </button>
-      <button 
-        className={`dropdown-item ${isPinned ? 'active' : ''}`}
-        onClick={handlePinClick}
-      >
-        {isPinned ? <BsPinAngleFill className="dropdown-icon" /> : <BsPinAngle className="dropdown-icon" />}
-        <span>{isPinned ? 'Unpin' : 'Pin'}</span>
+      <button className="dropdown-item">
+        <BsPinAngle className="dropdown-icon" />
+        <span>Pin</span>
       </button>
 
       {showListPopup && (
