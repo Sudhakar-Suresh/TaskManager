@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './ReminderPopup.css';
 
 const ReminderPopup = ({ isOpen, onClose, onSave, initialDate }) => {
@@ -7,6 +7,7 @@ const ReminderPopup = ({ isOpen, onClose, onSave, initialDate }) => {
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [isRecurring, setIsRecurring] = useState(false);
+  const popupRef = useRef(null);
 
   useEffect(() => {
     if (isOpen) {
@@ -26,6 +27,23 @@ const ReminderPopup = ({ isOpen, onClose, onSave, initialDate }) => {
       setIsRecurring(false);
     }
   }, [isOpen, initialDate]);
+
+  // Add click outside handler
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (popupRef.current && !popupRef.current.contains(event.target)) {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen, onClose]);
 
   const timeOptions = generateTimeOptions();
 
@@ -211,9 +229,15 @@ const ReminderPopup = ({ isOpen, onClose, onSave, initialDate }) => {
 
   if (!isOpen) return null;
 
+  const handleOverlayClick = (e) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
+
   return (
-    <div className="reminder-overlay">
-      <div className="reminder-popup">
+    <div className="reminder-overlay" onClick={handleOverlayClick}>
+      <div className="reminder-popup" ref={popupRef} onClick={e => e.stopPropagation()}>
         <div className="reminder-header">
           <h2>Reminder</h2>
           <button className="close-button" onClick={onClose}>&times;</button>
