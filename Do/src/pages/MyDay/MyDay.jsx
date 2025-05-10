@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import AddTask from '../../components/AddTask/AddTask';
-import TaskCard from '../../components/TaskCard/TaskCard';
+import AddTask from '../../components/Task/AddTask/AddTask';
+import TaskCard from '../../components/Task/TaskCard/TaskCard';
 import './MyDay.css';
 
 const MyDay = ({ 

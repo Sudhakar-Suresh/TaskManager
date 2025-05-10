@@ -1,5 +1,5 @@
 import React from 'react';
-import TaskCard from '../../components/TaskCard/TaskCard';
+import TaskCard from '../../components/Task/TaskCard/TaskCard';
 import './CompletedTasks.css';
 
 const CompletedTasks = ({ tasks, onUpdateTask, onDeleteTask, onToggleComplete }) => {

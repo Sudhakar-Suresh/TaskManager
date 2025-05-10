@@ -2,9 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import { BiPencil } from 'react-icons/bi';
 import { BsThreeDotsVertical, BsBell, BsPinAngle, BsPinAngleFill, BsCheck } from 'react-icons/bs';
 import { IoCloseOutline } from 'react-icons/io5';
-import TaskDropdown from '../TaskDropdown/TaskDropdown';
-import ReminderPopup from '../ReminderPopup/ReminderPopup';
-import ListPopup from '../ListPopup/ListPopup';
+import TaskDropdown from '../../Task/TaskDropdown/TaskDropdown';
+import ReminderPopup from '../../ReminderPopup/ReminderPopup';
+import ListPopup from '../../List/ListPopup/ListPopup';
 import './TaskCard.css';
 
 const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete }) => {

@@ -4,7 +4,7 @@ import './Sidebar.css';
 // Import Font Awesome components
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbtack } from '@fortawesome/free-solid-svg-icons';
-import AddListPopup from '../AddListPopup/AddListPopup';
+import AddListPopup from '../List/AddListPopup/AddListPopup';
 
 // Import animation data
 import settingData from '../../assets/sidebar/setting.json';
