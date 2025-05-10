@@ -38,17 +38,31 @@ const MyDay = ({
 
   return (
     <div className="my-day-container">
-      <div className="day-header">
-        <div className="greeting-section">
-          <h1>{listName || 'My day'}</h1>
-          <p>{getGreeting()}, Sudhakar</p>
+      <div className="header-content">
+        <div className="greeting-container">
+          <h1 className="greeting-heading">{getGreeting()}, Sudhakar<span className="blue-dot">.</span></h1>
+          <p className="greeting-subtitle">Time to make your own luck</p>
         </div>
         
-        <div className="date-display">
-          <div className="date-box">
-            <div className="day-name">{dayName}</div>
+        <div className="date-container">
+          <div className="date-card">
+            <div className="date-day-name">{dayName}</div>
             <div className="date-number">{date}</div>
-            <div className="month-name">{month}</div>
+            <div className="date-month">May</div>
+          </div>
+          
+          <div className="meeting-info">
+            <p className="meeting-text">Join video meetings with one tap</p>
+            <div className="calendar-buttons">
+              <button className="calendar-button google">
+                <span className="calendar-icon">📅</span>
+                Connect Google Calendar
+              </button>
+              <button className="calendar-button outlook">
+                <span className="calendar-icon">📆</span>
+                Connect Outlook Calendar
+              </button>
+            </div>
           </div>
         </div>
       </div>
