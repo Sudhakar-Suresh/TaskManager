@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import AddTask from '../../components/Task/AddTask/AddTask';
 import TaskCard from '../../components/Task/TaskCard/TaskCard';
+import TaskExpandedPopup from '../../components/Task/TaskExpandedPopup/TaskExpandedPopup';
 import './MyDay.css';
 
 const MyDay = ({ 
@@ -12,7 +13,7 @@ const MyDay = ({
   isCompletedView = false,
   userLists = [],
   onAddList,
-  listName
+  listName = 'Personal'
 }) => {
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -35,6 +36,8 @@ const MyDay = ({
     if (!a.isPinned && b.isPinned) return 1;
     return new Date(b.createdAt) - new Date(a.createdAt);
   });
+
+  const [selectedTask, setSelectedTask] = useState(null);
 
   return (
     <div className="my-day-container">
@@ -86,6 +89,20 @@ const MyDay = ({
           ))}
         </div>
       </div>
+      
+      {selectedTask && (
+        <TaskExpandedPopup
+          isOpen={!!selectedTask}
+          onClose={() => setSelectedTask(null)}
+          task={selectedTask}
+          onUpdate={onUpdateTask}
+          onDelete={onDeleteTask}
+          currentList={listName}
+          userLists={userLists}
+          onAddList={onAddList}
+          selectedTags={selectedTask.tags || []}
+        />
+      )}
     </div>
   );
 };

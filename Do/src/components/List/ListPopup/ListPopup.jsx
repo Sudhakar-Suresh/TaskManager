@@ -1,140 +1,121 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { IoPersonOutline } from 'react-icons/io5';
 import { MdOutlineKeyboardArrowRight } from 'react-icons/md';
 import { BsCheck2 } from 'react-icons/bs';
+import { AiOutlinePlus } from 'react-icons/ai';
 import './ListPopup.css';
 
-const ListPopup = ({ isOpen, onClose, onListSelect, selectedList = 'Personal', userLists = [], onAddList }) => {
-  const [showAddListInput, setShowAddListInput] = useState(false);
-  const [newListName, setNewListName] = useState('');
+const ListPopup = ({ 
+  isOpen, 
+  onClose, 
+  onListSelect, 
+  selectedList = 'Personal', 
+  userLists = [], 
+  onAddList,
+  position = null,
+  variant = 'centered'
+}) => {
+  const popupRef = useRef(null);
 
+  // Get lists from localStorage or use default
+  const [lists, setLists] = useState(() => {
+    const savedLists = localStorage.getItem('userLists');
+    return savedLists ? JSON.parse(savedLists) : ['Personal', 'Work', 'Grocery List'];
+  });
+
+  // Keep lists in sync
   useEffect(() => {
-    console.log("ListPopup received userLists:", userLists);
+    setLists(userLists);
   }, [userLists]);
 
-  // Prevent scrolling of the background when popup is open
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    }
-    return () => {
-      document.body.style.overflow = 'auto';
+    const handleClickOutside = (event) => {
+      if (popupRef.current && !popupRef.current.contains(event.target)) {
+        onClose();
+      }
     };
-  }, [isOpen]);
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
-
-  // If userLists is empty, use default lists
-  const displayLists = userLists.length > 0 ? 
-    userLists.map((name, id) => ({ id, name })) : 
-    [
-      { id: 1, name: 'Personal' },
-      { id: 2, name: 'Work' },
-      { id: 3, name: 'Grocery List' }
-    ];
 
   const handleListClick = (listName) => {
     onListSelect(listName);
     onClose();
   };
 
-  const handleOverlayClick = (e) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
-  };
-
-  const handleAddListClick = () => {
-    setShowAddListInput(true);
-  };
-
-  const handleAddListSubmit = () => {
-    if (newListName.trim() && onAddList) {
-      console.log("Adding new list:", newListName.trim());
-      onAddList(newListName.trim());
-      setNewListName('');
-      setShowAddListInput(false);
-    }
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      handleAddListSubmit();
-    } else if (e.key === 'Escape') {
-      setShowAddListInput(false);
-      setNewListName('');
-    }
-  };
+  const popupStyle = variant === 'positioned' && position ? {
+    position: 'fixed',
+    top: `${position.top}px`,
+    left: `${position.left}px`,
+  } : {};
 
   return (
-    <div className="list-popup-overlay" onClick={handleOverlayClick}>
-      <div className="list-popup" onClick={e => e.stopPropagation()}>
+    <div 
+      className={`list-popup-overlay ${variant}`} 
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          onClose();
+        }
+      }}
+    >
+      <div 
+        className={`list-popup ${variant}`}
+        ref={popupRef}
+        style={popupStyle}
+        onClick={e => e.stopPropagation()}
+      >
         <div className="list-popup-header">
           Move to...
         </div>
 
         <div className="list-section">
           <div className="section-title">
-            <span>My lists</span>
-            <button className="add-list-button" onClick={handleAddListClick}>⊕</button>
+            <span className="section-name">My lists</span>
+            <AiOutlinePlus 
+              className="add-icon"
+              onClick={() => onAddList && onAddList('New List')}
+            />
           </div>
           
-          {showAddListInput && (
-            <div className="add-list-input-container">
-              <input
-                type="text"
-                value={newListName}
-                onChange={(e) => setNewListName(e.target.value)}
-                placeholder="Add new list"
-                className="add-list-input"
-                autoFocus
-                onKeyDown={handleKeyPress}
-              />
-              <div className="add-list-buttons">
-                <button 
-                  className="add-list-save-btn" 
-                  onClick={handleAddListSubmit}
-                  disabled={!newListName.trim()}
-                >
-                  Add
-                </button>
-                <button 
-                  className="add-list-cancel-btn" 
-                  onClick={() => {
-                    setShowAddListInput(false);
-                    setNewListName('');
-                  }}
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          )}
-          
-          {displayLists.map(list => (
+          {lists.map((listName) => (
             <button
-              key={list.id}
-              className={`list-item ${list.name === selectedList ? 'selected' : ''}`}
-              onClick={() => handleListClick(list.name)}
+              key={listName}
+              className={`list-item ${listName === selectedList ? 'selected' : ''}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleListClick(listName);
+              }}
             >
-              <span className="list-name">{list.name}</span>
-              {list.name === selectedList && (
+              <div className="list-item-content">
+                <span className="list-name">{listName}</span>
+              </div>
+              {listName === selectedList && (
                 <BsCheck2 className="check-icon" />
               )}
             </button>
           ))}
-        </div>
 
-        <div className="list-section">
+          <div className="section-divider"></div>
+
           <div className="section-title">
-            <span>hio</span>
-            <IoPersonOutline className="share-icon" />
+            <span className="section-name">hio</span>
+            <IoPersonOutline className="person-icon" />
           </div>
           
-          <button className="list-item shared-item">
-            <div className="shared-item-left">
-              <span className="user-avatar">👤</span>
-              <span className="list-name">Hio</span>
+          <button className="list-item shared">
+            <div className="list-item-content">
+              <div className="shared-list-info">
+                <IoPersonOutline className="person-small-icon" />
+                <span className="list-name">Hio</span>
+              </div>
             </div>
             <MdOutlineKeyboardArrowRight className="arrow-icon" />
           </button>

@@ -43,6 +43,11 @@ const TaskExpandedPopup = ({
         ];
   });
 
+  const [lists, setLists] = useState(() => {
+    const savedLists = localStorage.getItem('userLists');
+    return savedLists ? JSON.parse(savedLists) : ['Personal', 'Work', 'Grocery List'];
+  });
+
   useEffect(() => {
     if (task.list) {
       setTaskList(task.list);
@@ -50,6 +55,12 @@ const TaskExpandedPopup = ({
       setTaskList(currentList);
     }
   }, [task.list, currentList]);
+
+  useEffect(() => {
+    if (userLists && userLists.length > 0) {
+      setLists(userLists);
+    }
+  }, [userLists]);
 
   useEffect(() => {
     if (isOpen) {
@@ -227,6 +238,7 @@ const TaskExpandedPopup = ({
             <button 
               className="quick-action-btn" 
               onClick={handleListClick}
+              title="Change list"
             >
               <BiListUl className="action-icon" />
               <span>{taskList}</span>
@@ -336,8 +348,14 @@ const TaskExpandedPopup = ({
             onClose={() => setShowListPopup(false)}
             onListSelect={handleListSelect}
             selectedList={taskList}
-            userLists={userLists}
-            onAddList={onAddList}
+            userLists={lists}
+            onAddList={(listName) => {
+              if (onAddList) {
+                onAddList(listName);
+                setLists(prev => [...prev, listName]);
+                handleListSelect(listName);
+              }
+            }}
             variant="centered"
           />
         )}
