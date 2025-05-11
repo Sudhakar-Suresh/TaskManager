@@ -8,7 +8,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 2000;
+  z-index: 1000;
 }
 
 .task-expanded-popup {
@@ -16,12 +16,14 @@
   width: 100%;
   max-width: 600px;
   height: 100vh;
-  max-height: 800px;
+  max-height: 90vh;
   border-radius: 16px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
   animation: popIn 0.2s ease-out;
+  position: relative;
+  z-index: 1001;
 }
 
 @keyframes popIn {
@@ -40,8 +42,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   background: white;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
 .header-left {
@@ -96,27 +101,56 @@
 
 .quick-actions {
   display: flex;
-  gap: 12px;
-  margin-bottom: 32px;
+  gap: 8px;
+  margin: 16px 0;
 }
 
 .quick-action-btn {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 16px;
-  background: white;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 20px;
-  color: #666;
-  font-size: 13px;
+  padding: 8px 12px;
+  border: none;
+  background: none;
   cursor: pointer;
+  color: #666;
+  font-size: 14px;
+  border-radius: 6px;
   transition: all 0.2s ease;
 }
 
 .quick-action-btn:hover {
-  background: rgba(0, 0, 0, 0.02);
-  border-color: rgba(0, 0, 0, 0.15);
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.quick-action-btn.has-reminder,
+.quick-action-btn.has-tags {
+  color: #2196F3;
+}
+
+.action-icon {
+  font-size: 18px;
+}
+
+.recurring-indicator {
+  font-size: 16px;
+  margin-left: 4px;
+  color: #2196F3;
+}
+
+.task-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.task-tag {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: white;
 }
 
 .section {
@@ -318,5 +352,38 @@
     height: 100%;
     max-height: none;
     border-radius: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .quick-actions {
+    flex-direction: column;
+  }
+
+  .quick-action-btn {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+.reminder-popup,
+.list-popup,
+.tag-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1002;
+  animation: popupFadeIn 0.2s ease-out;
+}
+
+@keyframes popupFadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
   }
 } 
