@@ -313,37 +313,24 @@
   opacity: 0.8;
 }
 
-/* Reminder badge animation */
+/* Reminder badge animation - Update to handle hover behavior */
 .task-date {
+  animation: none;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  margin-top: 0;
+}
+
+.task-card:hover .task-date {
   animation: slideFadeIn 0.3s ease;
-}
-
-@keyframes slideFadeIn {
-  from {
-    opacity: 0;
-    transform: translateX(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-.task-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex: 1;
-  padding-right: 90px; /* Add space for the action buttons */
-}
-
-.task-info {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+  opacity: 1;
+  max-height: 30px;
   margin-top: 4px;
 }
 
+/* Update task-date definition at line 346 */
 .task-date {
   display: flex;
   align-items: center;
@@ -439,6 +426,16 @@
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+  margin-top: 0;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.task-card:hover .task-tags {
+  opacity: 1;
+  max-height: 50px;
   margin-top: 4px;
 }
 
@@ -476,4 +473,10 @@
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+/* Add special case for completed tasks to maintain consistency */
+.task-card.completed:hover .task-date,
+.task-card.completed:hover .task-tags {
+  opacity: 0.6;
 } 
