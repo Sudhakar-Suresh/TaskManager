@@ -8,6 +8,9 @@
   border: 1px solid rgba(0, 0, 0, 0.08);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   transform-origin: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
 }
 
 .task-card:hover {
@@ -112,6 +115,9 @@
   opacity: 0;
   transform: translateX(10px);
   transition: all 0.3s ease;
+  position: absolute;
+  top: 16px;
+  right: 16px;
 }
 
 .task-card:hover .task-actions {
@@ -328,6 +334,7 @@
   align-items: center;
   gap: 12px;
   flex: 1;
+  padding-right: 90px; /* Add space for the action buttons */
 }
 
 .task-info {
