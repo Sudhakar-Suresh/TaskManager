@@ -261,7 +261,9 @@ const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete, userLists = [], 
         ref={cardRef}
         className={`task-card ${isDeleting ? 'deleting' : ''} 
                    ${isPinned ? 'pinned' : ''} 
-                   ${task.completed ? 'completed' : ''}`}
+                   ${task.completed ? 'completed' : ''}
+                   ${selectedTags.length > 0 ? 'has-tags' : ''}
+                   ${task.reminder ? 'has-reminder' : ''}`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => !dropdownOpen && setIsHovered(false)}
         onClick={handleCardClick}
