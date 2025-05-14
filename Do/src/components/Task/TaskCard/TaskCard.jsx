@@ -37,10 +37,13 @@ const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete, userLists = [], 
         ];
   });
 
+  // Update local state when task prop changes
   useEffect(() => {
-    // Update reminder state when task changes
     setReminder(task.reminder || null);
-  }, [task.reminder]);
+    setSelectedTags(task.tags || []);
+    setCurrentList(task.list || 'Personal');
+    setIsPinned(task.isPinned || false);
+  }, [task]);
 
   // Close tag popup when clicking outside
   useEffect(() => {
@@ -253,6 +256,17 @@ const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete, userLists = [], 
     setIsExpanded(true);
   };
 
+  const handleTaskUpdate = (updatedTask) => {
+    // Update local state
+    setReminder(updatedTask.reminder || null);
+    setSelectedTags(updatedTask.tags || []);
+    setCurrentList(updatedTask.list || 'Personal');
+    setIsPinned(updatedTask.isPinned || false);
+    
+    // Propagate update to parent
+    onUpdate(updatedTask);
+  };
+
   console.log("List popup state:", isListPopupOpen);
 
   return (
@@ -402,10 +416,12 @@ const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete, userLists = [], 
         isOpen={isExpanded}
         onClose={() => setIsExpanded(false)}
         task={task}
-        onUpdate={onUpdate}
+        onUpdate={handleTaskUpdate}
         onDelete={onDelete}
         currentList={currentList}
         selectedTags={selectedTags}
+        userLists={userLists}
+        onAddList={onAddList}
       />
     </>
   );

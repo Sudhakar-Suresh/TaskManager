@@ -71,6 +71,12 @@ const TaskExpandedPopup = ({
     };
   }, [isOpen]);
 
+  useEffect(() => {
+    setReminder(task.reminder || null);
+    setCurrentTags(task.tags || selectedTags);
+    setTaskList(task.list || currentList);
+  }, [task, selectedTags, currentList]);
+
   const handleNotesChange = (e) => {
     setNotes(e.target.value);
     onUpdate({

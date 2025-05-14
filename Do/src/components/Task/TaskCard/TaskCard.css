@@ -546,4 +546,33 @@
   flex-direction: column;
   gap: 0px;
   margin-top: 2px;
+}
+
+/* Add smooth transitions for tag and reminder updates */
+.task-tags,
+.task-date {
+  transition: all 0.3s ease;
+}
+
+/* Ensure smooth list name updates */
+.list-name {
+  transition: all 0.3s ease;
+}
+
+/* Add animation for tag and reminder updates */
+@keyframes updatePop {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.task-tags.updating,
+.task-date.updating,
+.list-name.updating {
+  animation: updatePop 0.3s ease;
 } 
