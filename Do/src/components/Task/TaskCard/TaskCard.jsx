@@ -280,6 +280,11 @@ const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete, userLists = [], 
               {task.completed && <BsCheck className="check-icon" />}
             </label>
           </div>
+          
+          <div className="task-list-info">
+            <span className="list-name">My lists &gt; {currentList}</span>
+          </div>
+          
           <div className="task-content">
             <div className="task-title-row">
               <span className="task-title">
@@ -289,9 +294,6 @@ const TaskCard = ({ task, onDelete, onUpdate, onToggleComplete, userLists = [], 
               {isPinned && <BsPinAngleFill className="pinned-indicator" />}
             </div>
             <div className="task-info">
-              <div className="task-list-info">
-                <span className="list-name">My lists &gt; {currentList}</span>
-              </div>
               {selectedTags.length > 0 && (
                 <div className="task-tags">
                   {selectedTags.map(tag => {

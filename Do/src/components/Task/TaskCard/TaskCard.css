@@ -9,7 +9,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   transform-origin: center;
   display: flex;
-  height: 80px;
+  height: 85px;
   justify-content: space-between;
   align-items: flex-start;
 }
@@ -156,8 +156,13 @@
 
 /* Task content animations */
 .task-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
   transition: all 0.3s ease;
   overflow: hidden;
+  flex: 1;
+  margin-top: 4px;
 }
 
 .task-card:hover .task-content {
@@ -222,6 +227,9 @@
   cursor: pointer;
   transition: all 0.3s ease;
   background-color: white;
+  margin-top: 25px;
+  margin-bottom: -40px;
+
 }
 
 .task-checkbox input[type="checkbox"]:checked + label {
@@ -305,6 +313,8 @@
   color: #333;
   transition: color 0.2s ease;
   line-height: 1.2;
+  display: block;
+  width: 100%;
 }
 
 .task-card:hover .task-title {
@@ -313,9 +323,10 @@
 
 /* Task info hover effect */
 .task-info {
-  transition: all 0.3s ease;
-  gap: 1px;
-  margin-top: 1px;
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  margin-top: 2px;
 }
 
 .task-card:hover .task-info {
@@ -327,7 +338,7 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 2px 5px;
+  padding: 0px 5px;
   background-color: rgba(0, 122, 255, 0.08);
   border-radius: 4px;
   font-size: 10px;
@@ -336,13 +347,14 @@
   max-height: 0;
   overflow: hidden;
   transition: all 0.3s ease;
-  margin-top: 2px;
+  margin-top: 0;
 }
 
-.task-card:hover .task-date {
+.task-card:hover .task-date,
+.task-card.has-reminder:hover .task-date {
   opacity: 1;
-  max-height: 25px;
-  margin-top: 2px;
+  max-height: 20px;
+  margin-top: 0;
   animation: slideFadeIn 0.3s ease;
 }
 
@@ -378,13 +390,16 @@
 .task-list-info {
   display: flex;
   align-items: center;
-  gap: 6px;
-  color: #666;
+  margin-right: 8px;
+  min-width: fit-content;
+  height: 16px;
+  margin-left: 24px;
 }
 
 .list-name {
   font-size: 10px;
   color: #666;
+  white-space: nowrap;
 }
 
 .task-reminder {
@@ -451,11 +466,11 @@
 .task-card:hover .task-tags {
   opacity: 1;
   max-height: 30px;
-  margin-top: 2px;
+  margin-top: 1px;
 }
 
 .task-tag {
-  padding: 1px 5px;
+  padding: 0px 5px;
   border-radius: 4px;
   font-size: 10px;
   font-weight: 500;
@@ -478,13 +493,6 @@
   color: #333333;
 }
 
-.task-info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  margin-top: 2px;
-}
-
 /* Add special case for completed tasks to maintain consistency */
 .task-card.completed:hover .task-date,
 .task-card.completed:hover .task-tags {
@@ -503,13 +511,39 @@
 .task-card.has-tags:hover .task-tags {
   opacity: 1;
   max-height: 30px;
-  margin-top: 2px;
+  margin-top: 1px;
 }
 
 /* Only show reminder on hover when it exists */
 .task-card.has-reminder:hover .task-date {
   opacity: 1;
   max-height: 20px;
-  margin-top: 2px;
+  margin-top: 1px;
   animation: slideFadeIn 0.3s ease;
+}
+
+/* Move the task-list-info out of task-info and next to checkbox */
+.task-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  padding-right: 90px;
+}
+
+/* Adjust task title row spacing */
+.task-title-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-top: 8px;
+  margin-left: 24px;
+}
+
+/* Ensure no additional margin on task-info affecting layout */
+.task-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  margin-top: 2px;
 } 
