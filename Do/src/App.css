@@ -9,25 +9,23 @@
 /* Main container */
 .app-container {
   display: flex;
-  width: 100%;
   height: 100vh;
   position: relative;
-  background-color: transparent;
+  overflow: hidden;
 }
 
 /* Main content styles */
 .main-content {
   flex: 1;
-  min-height: 100vh;
-  margin-left: 60px;
-  transition: margin-left 0.3s ease;
-  background-color: rgba(255, 255, 255, 0.007); /* Semi-transparent */
-  overflow-x: hidden;
-  backdrop-filter: blur(px); /* Creates a frosted glass effect */
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  background-color: transparent;
 }
 
 .main-content.shifted {
-  margin-left: 250px;
+  margin-left: 240px;
+  transition: margin-left 0.3s ease;
 }
 
 .logo {
@@ -64,4 +62,116 @@
 
 .read-the-docs {
   color: #888;
+}
+
+/* Add styles to handle background image */
+.background-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.page-container {
+  height: 100vh;
+  background-color: transparent;
+}
+
+.blank-container {
+  padding: 24px;
+  height: 100%;
+  background-color: white;
+}
+
+.blank-header {
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.blank-header h1 {
+  font-size: 32px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.blank-header .dot {
+  color: #007AFF;
+}
+
+.standalone-page {
+  height: 100vh;
+  width: 100%;
+  background-color: transparent;
+}
+
+.independent-page {
+  height: 100vh;
+  width: 100%;
+  background-color: transparent;
+  position: relative;
+  z-index: 1;
+}
+
+/* New container styles */
+.base-container {
+  height: 100vh;
+  width: 100%;
+  background-color: transparent;
+  padding: 20px;
+}
+
+.white-container {
+  height: 100%;
+  background-color: white;
+  border-radius: 8px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.container-header {
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.container-header h1 {
+  font-size: 32px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.container-header .dot {
+  color: #007AFF;
+}
+
+.container-header .subtitle {
+  font-size: 16px;
+  color: #666;
+  margin: 8px 0 0 0;
+}
+
+.container-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.hello-world-container {
+  height: 100vh;
+  width: 100%;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hello-world-container h1 {
+  font-size: 48px;
+  color: #007AFF;
+  font-weight: bold;
 }

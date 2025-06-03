@@ -4,6 +4,9 @@ import Sidebar from './components/Sidebar/Sidebar'
 import MyDay from './pages/MyDay/MyDay'
 import CompletedTasks from './pages/CompletedTasks/CompletedTasks'
 import BackgroundImage from './components/BackgroundImage/BackgroundImage'
+import MyCalendar from './pages/MyCalendar/MyCalendar'
+import AllTasks from './pages/AllTasks/AllTasks'
+import Next7Days from './pages/Next7Days/Next7Days'
 
 function App() {
   const [activePage, setActivePage] = useState('My day')
@@ -103,45 +106,82 @@ function App() {
   };
 
   const renderContent = () => {
-    switch(activePage) {
-      case 'My day':
-        return (
-          <MyDay 
-            tasks={tasks.filter(task => !task.completed)}
-            onAddTask={handleAddTask}
-            onUpdateTask={handleUpdateTask}
-            onDeleteTask={handleDeleteTask}
-            onToggleComplete={handleToggleComplete}
-            userLists={userLists}
-            onAddList={handleAddList}
-          />
-        );
-      case 'Completed':
-        return (
-          <CompletedTasks 
-            tasks={tasks.filter(task => task.completed)}
-            onUpdateTask={handleUpdateTask}
-            onDeleteTask={handleDeleteTask}
-            onToggleComplete={handleToggleComplete}
-            userLists={userLists}
-            onAddList={handleAddList}
-          />
-        );
-      default:
-        // Show filtered tasks for the selected list
-        return (
-          <MyDay 
-            tasks={tasks.filter(task => !task.completed && task.list === activePage)}
-            onAddTask={handleAddTask}
-            onUpdateTask={handleUpdateTask}
-            onDeleteTask={handleDeleteTask}
-            onToggleComplete={handleToggleComplete}
-            userLists={userLists}
-            onAddList={handleAddList}
-            listName={activePage}
-          />
-        );
+    if (activePage === 'My day') {
+      return (
+        <MyDay 
+          tasks={tasks.filter(task => !task.completed)}
+          onAddTask={handleAddTask}
+          onUpdateTask={handleUpdateTask}
+          onDeleteTask={handleDeleteTask}
+          onToggleComplete={handleToggleComplete}
+          userLists={userLists}
+          onAddList={handleAddList}
+        />
+      );
     }
+
+    if (activePage === 'Next 7 days') {
+      return (
+        <Next7Days 
+          tasks={tasks}
+          onAddTask={handleAddTask}
+          onUpdateTask={handleUpdateTask}
+          onDeleteTask={handleDeleteTask}
+          onToggleComplete={handleToggleComplete}
+          userLists={userLists}
+          onAddList={handleAddList}
+        />
+      );
+    }
+
+    if (activePage === 'All my tasks') {
+      return (
+        <AllTasks 
+          tasks={tasks}
+          onAddTask={handleAddTask}
+          onUpdateTask={handleUpdateTask}
+          onDeleteTask={handleDeleteTask}
+          onToggleComplete={handleToggleComplete}
+          userLists={userLists}
+          onAddList={handleAddList}
+        />
+      );
+    }
+
+    if (activePage === 'My Calendar') {
+      return <MyCalendar />;
+    }
+
+    if (activePage === 'Completed') {
+      return (
+        <CompletedTasks 
+          tasks={tasks.filter(task => task.completed)}
+          onUpdateTask={handleUpdateTask}
+          onDeleteTask={handleDeleteTask}
+          onToggleComplete={handleToggleComplete}
+          userLists={userLists}
+          onAddList={handleAddList}
+        />
+      );
+    }
+
+    // For user lists
+    if (userLists.includes(activePage)) {
+      return (
+        <MyDay 
+          tasks={tasks.filter(task => !task.completed && task.list === activePage)}
+          onAddTask={handleAddTask}
+          onUpdateTask={handleUpdateTask}
+          onDeleteTask={handleDeleteTask}
+          onToggleComplete={handleToggleComplete}
+          userLists={userLists}
+          onAddList={handleAddList}
+          listName={activePage}
+        />
+      );
+    }
+
+    return null;
   };
 
   return (

@@ -1,0 +1,82 @@
+.alltasks-root {
+  height: 100%;
+  width: 100%;
+  background-color: transparent;
+}
+
+.alltasks-container {
+  height: 100%;
+  padding: 24px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.alltasks-header {
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.header-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.alltasks-header h1 {
+  font-size: 32px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.dot {
+  color: #007AFF;
+}
+
+.subtitle {
+  font-size: 16px;
+  color: #666;
+  margin: 8px 0 0 0;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.action-btn {
+  padding: 8px 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  background: white;
+  color: #666;
+  cursor: pointer;
+}
+
+.alltasks-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-state {
+  text-align: center;
+  color: #666;
+}
+
+.add-task-btn {
+  margin-top: 12px;
+  padding: 8px 16px;
+  border: none;
+  background: #007AFF;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.add-task-btn:hover {
+  background: #0056b3;
+} 
