@@ -11,16 +11,21 @@
   height: 100vh;
   width: 100%;
   background-color: transparent;
-  padding: 20px;
+  padding: 0;
   box-sizing: border-box;
   overflow: hidden;
 }
 
-.next7days-header {
+.app-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  padding: 12px 16px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 20px;
+  margin-bottom: 16px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .header-left {
@@ -29,17 +34,49 @@
   gap: 10px;
 }
 
-.header-icon {
+.calendar-icon {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .header-left h1 {
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 500;
   color: #333;
   margin: 0;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.my-lists-button, .filter-button, .more-options-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 16px;
+  background-color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+  color: #555;
+  cursor: pointer;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.clear-completed-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 16px;
+  background-color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+  color: #2196F3;
+  border: 1px solid rgba(33, 150, 243, 0.2);
+  cursor: pointer;
 }
 
 .header-actions {

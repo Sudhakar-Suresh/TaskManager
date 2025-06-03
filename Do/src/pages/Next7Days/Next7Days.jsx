@@ -51,37 +51,52 @@ const Next7Days = ({
 
   return (
     <div className="next7days-container">
-      <div className="next7days-header">
+      <div className="app-header">
         <div className="header-left">
-          <div className="header-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="24" height="24" rx="6" fill="#F0F0F0"/>
-              <path d="M8 12H16M12 8V16" stroke="#555555" strokeWidth="1.5" strokeLinecap="round"/>
+          <div className="calendar-icon">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="1" y="3" width="18" height="16" rx="2" stroke="#333" strokeWidth="1.5"/>
+              <path d="M1 7H19" stroke="#333" strokeWidth="1.5"/>
+              <path d="M6 1V5" stroke="#333" strokeWidth="1.5" strokeLinecap="round"/>
+              <path d="M14 1V5" stroke="#333" strokeWidth="1.5" strokeLinecap="round"/>
             </svg>
           </div>
           <h1>Next 7 days</h1>
         </div>
-        <div className="header-actions">
-          <div className="my-lists-filter">
+        
+        <div className="header-right">
+          <div className="my-lists-button">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M4 8H12M4 4H12M4 12H8" stroke="#555555" strokeWidth="1.5" strokeLinecap="round"/>
+              <path d="M2 8C2 7.44772 2.44772 7 3 7H13C13.5523 7 14 7.44772 14 8C14 8.55228 13.5523 9 13 9H3C2.44772 9 2 8.55228 2 8Z" fill="#555"/>
+              <path d="M2 4C2 3.44772 2.44772 3 3 3H13C13.5523 3 14 3.44772 14 4C14 4.55228 13.5523 5 13 5H3C2.44772 5 2 4.55228 2 4Z" fill="#555"/>
+              <path d="M2 12C2 11.4477 2.44772 11 3 11H9C9.55228 11 10 11.4477 10 12C10 12.5523 9.55228 13 9 13H3C2.44772 13 2 12.5523 2 12Z" fill="#555"/>
             </svg>
             <span>My lists</span>
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2 4L5 7L8 4" stroke="#555" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
           </div>
+          
           <div className="filter-button">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2 4H14M4 8H12M6 12H10" stroke="#555555" strokeWidth="1.5" strokeLinecap="round"/>
+              <path d="M2 4H14" stroke="#555" strokeWidth="1.5" strokeLinecap="round"/>
+              <path d="M4 8H12" stroke="#555" strokeWidth="1.5" strokeLinecap="round"/>
+              <path d="M6 12H10" stroke="#555" strokeWidth="1.5" strokeLinecap="round"/>
             </svg>
             <span>Filter</span>
           </div>
-          <div className="more-options">
+          
+          <div className="more-options-button">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M8 3V3.01M8 8V8.01M8 13V13.01" stroke="#555555" strokeWidth="2" strokeLinecap="round"/>
+              <circle cx="8" cy="3" r="1.5" fill="#555"/>
+              <circle cx="8" cy="8" r="1.5" fill="#555"/>
+              <circle cx="8" cy="13" r="1.5" fill="#555"/>
             </svg>
           </div>
-          <button className="clear-completed-btn">
+          
+          <button className="clear-completed-button">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M2 4H14M6 4V2H10V4M8 7V11M5 14H11C11.5523 14 12 13.5523 12 13V5H4V13C4 13.5523 4.4477 14 5 14Z" stroke="#2196F3" strokeWidth="1.5" strokeLinecap="round"/>
+              <path d="M4 4L12 12M4 12L12 4" stroke="#2196F3" strokeWidth="1.5" strokeLinecap="round"/>
             </svg>
             <span>Clear completed</span>
           </button>
