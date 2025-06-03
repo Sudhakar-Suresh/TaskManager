@@ -110,11 +110,20 @@
   cursor: pointer;
 }
 
+.days-grid-container {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
 .days-grid {
   display: flex;
   gap: 16px;
   overflow-x: auto;
+  height: 100%;
   padding-bottom: 20px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.05);
 }
 
 .day-card {
@@ -126,6 +135,8 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  max-height: calc(100% - 32px);
+  overflow-y: auto;
 }
 
 .day-header {
@@ -137,6 +148,8 @@
   font-weight: 600;
   color: #333;
   margin: 0;
+  display: flex;
+  align-items: center;
 }
 
 .today-label {
@@ -219,23 +232,45 @@
   border: 1px dashed #ddd;
 }
 
-/* Scrollbar styling */
+/* Scrollbar styling to match the image */
 .days-grid::-webkit-scrollbar {
-  height: 6px;
+  height: 4px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 .days-grid::-webkit-scrollbar-track {
   background: rgba(0, 0, 0, 0.05);
-  border-radius: 10px;
+  border-radius: 2px;
 }
 
 .days-grid::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.15);
-  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
 }
 
 .days-grid::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.25);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Vertical scrollbar for day cards */
+.day-card::-webkit-scrollbar {
+  width: 4px;
+}
+
+.day-card::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.day-card::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+}
+
+.day-card::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.2);
 }
 
 .next7days-content {
