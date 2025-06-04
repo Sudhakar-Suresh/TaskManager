@@ -57,7 +57,7 @@ function App() {
     );
   };
 
-  const handleAddTask = (taskText) => {
+  const handleAddTask = (taskText, list = 'Personal', dueDate = null) => {
     const newTask = {
       id: Date.now(),
       title: taskText,
@@ -66,7 +66,8 @@ function App() {
       completedAt: null,
       isPinned: false,
       reminder: null,
-      list: 'Personal'
+      list: list || 'Personal',
+      dueDate: dueDate
     };
     setTasks(prevTasks => [...prevTasks, newTask]);
   };

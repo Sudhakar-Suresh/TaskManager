@@ -1,14 +1,16 @@
-.next7days-root {
+.next7days-wrapper {
   flex: 1;
   overflow: hidden;
   height: 100%;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .next7days-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100%;
   width: 100%;
   background-color: transparent;
   padding: 0;
@@ -38,6 +40,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #333;
 }
 
 .header-left h1 {
@@ -114,16 +117,22 @@
   flex: 1;
   overflow: hidden;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .days-grid {
   display: flex;
   gap: 16px;
   overflow-x: auto;
-  height: 100%;
   padding-bottom: 20px;
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.05);
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  top: 80px;
 }
 
 .day-card {
@@ -135,8 +144,51 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  max-height: calc(100% - 32px);
-  overflow-y: auto;
+  height: 120px; /* Default compact height */
+  transition: height 0.3s ease;
+  overflow: hidden;
+}
+
+/* Dynamic height based on task count */
+.day-card.has-tasks {
+  height: 180px; /* Height with one task */
+}
+
+.day-card.has-multiple-tasks {
+  height: auto; /* Auto height with multiple tasks */
+  max-height: calc(100% - 20px);
+}
+
+/* Adjust height based on data attribute for more precise control */
+.day-card[data-task-count="2"] {
+  height: 240px;
+}
+
+.day-card[data-task-count="3"] {
+  height: 300px;
+}
+
+.day-card[data-task-count="4"] {
+  height: 360px;
+}
+
+.day-card[data-task-count="5"], 
+.day-card[data-task-count="6"],
+.day-card[data-task-count="7"],
+.day-card[data-task-count="8"],
+.day-card[data-task-count="9"] {
+  height: 420px;
+}
+
+.day-card[data-task-count="10"],
+.day-card[data-task-count="11"],
+.day-card[data-task-count="12"] {
+  height: 480px;
+}
+
+.day-card[data-task-count="13"] {
+  height: auto;
+  max-height: calc(100% - 20px);
 }
 
 .day-header {
@@ -150,13 +202,27 @@
   margin: 0;
   display: flex;
   align-items: center;
+  gap: 6px;
 }
 
 .today-label {
   font-weight: normal;
   color: #888;
   font-size: 14px;
-  margin-left: 5px;
+}
+
+.day-date {
+  font-weight: normal;
+  color: #888;
+  font-size: 14px;
+}
+
+.day-tasks-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  flex: 1;
 }
 
 .task-item {
@@ -165,7 +231,7 @@
   padding: 10px;
   border-radius: 8px;
   background-color: #f9f9f9;
-  margin-bottom: 8px;
+  margin-bottom: 0;
 }
 
 .checkbox {
@@ -175,6 +241,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
 
 .checkbox-circle {
@@ -206,33 +273,58 @@
 .task-close {
   opacity: 0;
   transition: opacity 0.2s;
+  cursor: pointer;
+  color: #999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .task-item:hover .task-close {
   opacity: 1;
 }
 
-.add-task-text {
-  color: #888;
-}
-
-.add-task-button {
+/* Add Task row styling */
+.add-task-row {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px;
-  color: #888;
-  font-size: 14px;
+  background-color: transparent;
   cursor: pointer;
+  border: none;
+  padding: 10px;
   margin-top: auto;
 }
 
-.add-me-task {
-  background-color: transparent;
-  border: 1px dashed #ddd;
+.add-task-plus {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
 }
 
-/* Scrollbar styling to match the image */
+.add-task-placeholder {
+  color: #888;
+  font-size: 14px;
+}
+
+.add-task-inline-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  color: #333;
+  outline: none;
+  padding: 0;
+}
+
+.add-task-inline-input::placeholder {
+  color: #888;
+}
+
+/* Fixed scrollbar at bottom */
 .days-grid::-webkit-scrollbar {
   height: 4px;
   position: fixed;
@@ -255,22 +347,35 @@
   background: rgba(0, 0, 0, 0.3);
 }
 
-/* Vertical scrollbar for day cards */
-.day-card::-webkit-scrollbar {
+.day-tasks-container::-webkit-scrollbar {
   width: 4px;
 }
 
-.day-card::-webkit-scrollbar-track {
-  background: transparent;
+.day-tasks-container::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
 }
 
-.day-card::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.1);
+.day-tasks-container::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
   border-radius: 2px;
 }
 
-.day-card::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.2);
+.day-tasks-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 768px) {
+  .days-grid {
+    left: 10px;
+    right: 10px;
+    top: 70px;
+    bottom: 10px;
+  }
+  
+  .day-card {
+    flex: 0 0 250px;
+    padding: 12px;
+  }
 }
 
 .next7days-content {
@@ -372,11 +477,6 @@
   color: #333;
 }
 
-.day-date {
-  font-size: 14px;
-  color: #666;
-}
-
 .task-count {
   background: rgba(0, 0, 0, 0.05);
   padding: 4px 8px;
@@ -412,25 +512,6 @@
 
 .add-task-form {
   margin-top: auto;
-}
-
-.add-task-input {
-  width: 100%;
-  padding: 10px 12px;
-  border-radius: 8px;
-  border: 1px solid #e0e0e0;
-  background: white;
-  font-size: 14px;
-  outline: none;
-  transition: border 0.2s ease;
-}
-
-.add-task-input:focus {
-  border-color: #2196f3;
-}
-
-.add-task-input::placeholder {
-  color: #999;
 }
 
 .filter-panel {
@@ -479,26 +560,6 @@
   justify-content: flex-end;
   gap: 12px;
   margin-top: 20px;
-}
-
-.cancel-button {
-  padding: 8px 16px;
-  background: transparent;
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
-  font-size: 14px;
-  color: #666;
-  cursor: pointer;
-}
-
-.apply-button {
-  padding: 8px 16px;
-  background: #2196f3;
-  border: none;
-  border-radius: 6px;
-  font-size: 14px;
-  color: white;
-  cursor: pointer;
 }
 
 /* Scrollbar styling */
