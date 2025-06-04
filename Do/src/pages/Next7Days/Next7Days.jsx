@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './Next7Days.css';
-import { FiPlus, FiCalendar, FiFilter, FiMoreHorizontal } from 'react-icons/fi';
+import { FiPlus } from 'react-icons/fi';
 import { IoCloseOutline } from 'react-icons/io5';
+import { FiCalendar, FiFilter, FiMoreHorizontal } from 'react-icons/fi';
 
 const Next7Days = ({ 
   tasks,
@@ -91,17 +92,7 @@ const Next7Days = ({
     dayCardRefs.current.forEach((ref, index) => {
       if (ref && ref.current) {
         const tasksCount = getTasksForDay(index).length;
-        // Apply a class based on task count
-        if (tasksCount === 0) {
-          ref.current.classList.remove('has-tasks');
-          ref.current.classList.remove('has-multiple-tasks');
-        } else if (tasksCount === 1) {
-          ref.current.classList.add('has-tasks');
-          ref.current.classList.remove('has-multiple-tasks');
-        } else {
-          ref.current.classList.add('has-tasks');
-          ref.current.classList.add('has-multiple-tasks');
-        }
+        ref.current.setAttribute('data-task-count', tasksCount);
       }
     });
   }, [tasks]);
@@ -165,14 +156,13 @@ const Next7Days = ({
           <div className="days-grid" ref={daysGridRef}>
             {days.map((day, index) => {
               const dayTasks = getTasksForDay(index);
-              const taskCount = dayTasks.length;
               
               return (
                 <div 
                   key={index} 
-                  className={`day-card ${taskCount > 0 ? 'has-tasks' : ''} ${taskCount > 1 ? 'has-multiple-tasks' : ''}`}
+                  className="day-card"
                   ref={dayCardRefs.current[index]}
-                  data-task-count={taskCount}
+                  data-task-count={dayTasks.length}
                 >
                   <div className="day-header">
                     <h2>
@@ -197,21 +187,12 @@ const Next7Days = ({
                           <div className="task-label">My lists • {task.list}</div>
                           <div className="task-text">{task.title}</div>
                         </div>
-                        <div 
-                          className="task-close"
-                          onClick={() => onDeleteTask(task.id)}
-                        >
-                          <IoCloseOutline size={14} />
-                        </div>
                       </div>
                     ))}
                   </div>
                   
                   {expandedTaskInput === index ? (
-                    <div className="task-item add-task-row" ref={taskInputRef}>
-                      <div className="add-task-plus">
-                        <FiPlus size={16} />
-                      </div>
+                    <div className="add-task-input-container" ref={taskInputRef}>
                       <input
                         type="text"
                         value={taskText}
@@ -224,13 +205,11 @@ const Next7Days = ({
                     </div>
                   ) : (
                     <div 
-                      className="task-item add-task-row"
+                      className="add-task-button"
                       onClick={() => setExpandedTaskInput(index)}
                     >
-                      <div className="add-task-plus">
-                        <FiPlus size={16} />
-                      </div>
-                      <div className="add-task-placeholder">Add Task</div>
+                      <FiPlus size={16} />
+                      <span>Add Task</span>
                     </div>
                   )}
                 </div>
