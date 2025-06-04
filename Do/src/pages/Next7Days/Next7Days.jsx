@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './Next7Days.css';
-import { FiPlus } from 'react-icons/fi';
+import { FiPlus, FiCalendar, FiFilter, FiMoreHorizontal } from 'react-icons/fi';
 import { IoCloseOutline } from 'react-icons/io5';
-import { FiCalendar, FiFilter, FiMoreHorizontal } from 'react-icons/fi';
+import TaskCard from '../../components/Task/TaskCard/TaskCard';
+import AddTask from '../../components/Task/AddTask/AddTask';
 
 const Next7Days = ({ 
   tasks,
@@ -17,12 +18,6 @@ const Next7Days = ({
   const [taskText, setTaskText] = useState('');
   const taskInputRef = useRef(null);
   const daysGridRef = useRef(null);
-  const dayCardRefs = useRef([]);
-
-  // Initialize refs array for day cards
-  useEffect(() => {
-    dayCardRefs.current = Array(7).fill().map((_, i) => dayCardRefs.current[i] || React.createRef());
-  }, []);
 
   // Get dates for the next 7 days
   const getDaysArray = () => {
@@ -62,43 +57,9 @@ const Next7Days = ({
     );
   };
 
-  // Handle clicks outside the expanded input
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (expandedTaskInput !== null && 
-          taskInputRef.current && 
-          !taskInputRef.current.contains(event.target)) {
-        setExpandedTaskInput(null);
-        setTaskText('');
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [expandedTaskInput]);
-
-  // Focus input when expanded
-  useEffect(() => {
-    if (expandedTaskInput !== null && taskInputRef.current) {
-      taskInputRef.current.focus();
-    }
-  }, [expandedTaskInput]);
-
-  // Update card heights when tasks change
-  useEffect(() => {
-    // This will run whenever tasks array changes
-    dayCardRefs.current.forEach((ref, index) => {
-      if (ref && ref.current) {
-        const tasksCount = getTasksForDay(index).length;
-        ref.current.setAttribute('data-task-count', tasksCount);
-      }
-    });
-  }, [tasks]);
-
-  const handleAddTask = (dayIndex) => {
-    if (taskText.trim()) {
+  // Add task with specific due date
+  const handleAddTaskForDay = (text, dayIndex) => {
+    if (text.trim()) {
       // Calculate the target date based on dayIndex
       const targetDate = new Date();
       targetDate.setDate(targetDate.getDate() + dayIndex);
@@ -106,19 +67,7 @@ const Next7Days = ({
       // Format the date as ISO string but keep only the date part
       const dateStr = targetDate.toISOString().split('T')[0];
       
-      onAddTask(taskText, 'Personal', dateStr);
-      setTaskText('');
-      setExpandedTaskInput(null);
-    }
-  };
-
-  const handleKeyDown = (e, dayIndex) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleAddTask(dayIndex);
-    } else if (e.key === 'Escape') {
-      setExpandedTaskInput(null);
-      setTaskText('');
+      onAddTask(text, 'Personal', dateStr);
     }
   };
 
@@ -161,7 +110,6 @@ const Next7Days = ({
                 <div 
                   key={index} 
                   className="day-card"
-                  ref={dayCardRefs.current[index]}
                   data-task-count={dayTasks.length}
                 >
                   <div className="day-header">
@@ -175,43 +123,72 @@ const Next7Days = ({
                   </div>
                   
                   <div className="day-tasks-container">
-                    {dayTasks.map((task, taskIndex) => (
-                      <div key={taskIndex} className="task-item">
-                        <div 
-                          className="checkbox" 
-                          onClick={() => onToggleComplete(task.id)}
-                        >
-                          <div className="checkbox-circle"></div>
-                        </div>
-                        <div className="task-info">
-                          <div className="task-label">My lists • {task.list}</div>
-                          <div className="task-text">{task.title}</div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  
-                  {expandedTaskInput === index ? (
-                    <div className="add-task-input-container" ref={taskInputRef}>
-                      <input
-                        type="text"
-                        value={taskText}
-                        onChange={(e) => setTaskText(e.target.value)}
-                        onKeyDown={(e) => handleKeyDown(e, index)}
-                        placeholder="Add Task"
-                        className="add-task-inline-input"
-                        autoFocus
+                    {dayTasks.map((task) => (
+                      <TaskCard 
+                        key={task.id} 
+                        task={task}
+                        onDelete={onDeleteTask}
+                        onUpdate={onUpdateTask}
+                        onToggleComplete={onToggleComplete}
+                        userLists={userLists}
+                        onAddList={onAddList}
                       />
+                    ))}
+                    
+                    <div className="day-add-task-wrapper">
+                      <div 
+                        className="day-add-task-button"
+                        onClick={() => setExpandedTaskInput(index)}
+                      >
+                        <FiPlus size={16} />
+                        <span>Add Task</span>
+                      </div>
+                      
+                      {expandedTaskInput === index && (
+                        <div className="day-add-task-input">
+                          <input
+                            type="text"
+                            value={taskText}
+                            onChange={(e) => setTaskText(e.target.value)}
+                            placeholder="Enter task title"
+                            ref={taskInputRef}
+                            autoFocus
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter' && !e.shiftKey) {
+                                e.preventDefault();
+                                handleAddTaskForDay(taskText, index);
+                                setTaskText('');
+                                setExpandedTaskInput(null);
+                              } else if (e.key === 'Escape') {
+                                setExpandedTaskInput(null);
+                                setTaskText('');
+                              }
+                            }}
+                          />
+                          <div className="day-add-task-actions">
+                            <button 
+                              onClick={() => {
+                                handleAddTaskForDay(taskText, index);
+                                setTaskText('');
+                                setExpandedTaskInput(null);
+                              }}
+                              disabled={!taskText.trim()}
+                            >
+                              Add
+                            </button>
+                            <button 
+                              onClick={() => {
+                                setExpandedTaskInput(null);
+                                setTaskText('');
+                              }}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  ) : (
-                    <div 
-                      className="add-task-button"
-                      onClick={() => setExpandedTaskInput(index)}
-                    >
-                      <FiPlus size={16} />
-                      <span>Add Task</span>
-                    </div>
-                  )}
+                  </div>
                 </div>
               );
             })}

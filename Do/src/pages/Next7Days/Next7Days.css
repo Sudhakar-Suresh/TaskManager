@@ -139,7 +139,7 @@
   flex: 0 0 280px;
   background-color: white;
   border-radius: 12px;
-  padding: 0;
+  padding: 16px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
@@ -147,48 +147,10 @@
   height: fit-content;
   max-height: calc(100% - 20px);
   min-height: 120px;
-  transition: height 0.2s ease;
-}
-
-.day-card[data-task-count="0"] {
-  height: fit-content;
-}
-
-.day-card[data-task-count="1"] {
-  height: fit-content;
-}
-
-.day-card[data-task-count="2"] {
-  height: fit-content;
-}
-
-.day-card[data-task-count="3"] {
-  height: fit-content;
-}
-
-.day-card[data-task-count="4"] {
-  height: fit-content;
-}
-
-.day-card[data-task-count="5"],
-.day-card[data-task-count="6"],
-.day-card[data-task-count="7"],
-.day-card[data-task-count="8"],
-.day-card[data-task-count="9"] {
-  height: fit-content;
-  overflow-y: auto;
-}
-
-.day-card[data-task-count="10"],
-.day-card[data-task-count="11"],
-.day-card[data-task-count="12"] {
-  height: fit-content;
-  overflow-y: auto;
 }
 
 .day-header {
-  padding: 16px 16px 8px 16px;
-  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 16px;
 }
 
 .day-header h2 {
@@ -216,8 +178,9 @@
 .day-tasks-container {
   display: flex;
   flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
   flex: 1;
-  overflow-y: visible;
 }
 
 .task-item {
@@ -291,41 +254,76 @@
   opacity: 1;
 }
 
-/* Add Task button styling to match the image */
-.add-task-button {
+/* Add Task button styling */
+.day-add-task-wrapper {
+  margin-top: 16px;
+}
+
+.day-add-task-button {
   display: flex;
   align-items: center;
-  padding: 12px 16px;
+  gap: 8px;
+  padding: 10px;
   color: #888;
   font-size: 14px;
   cursor: pointer;
-  border-top: 1px solid #f0f0f0;
-  margin-top: auto;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
 }
 
-.add-task-button svg {
-  margin-right: 8px;
-  color: #888;
+.day-add-task-button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
 }
 
-.add-task-input-container {
-  padding: 12px 16px;
-  border-top: 1px solid #f0f0f0;
-  margin-top: auto;
+.day-add-task-input {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  padding: 12px;
+  margin-top: 8px;
 }
 
-.add-task-inline-input {
+.day-add-task-input input {
   width: 100%;
-  border: none;
-  background: transparent;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 8px 12px;
   font-size: 14px;
-  color: #333;
+  margin-bottom: 10px;
   outline: none;
-  padding: 0;
 }
 
-.add-task-inline-input::placeholder {
-  color: #888;
+.day-add-task-input input:focus {
+  border-color: #2196F3;
+}
+
+.day-add-task-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.day-add-task-actions button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.day-add-task-actions button:first-child {
+  background-color: #2196F3;
+  color: white;
+  border: none;
+}
+
+.day-add-task-actions button:first-child:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.day-add-task-actions button:last-child {
+  background-color: transparent;
+  color: #666;
+  border: none;
 }
 
 /* Fixed scrollbar at bottom */
