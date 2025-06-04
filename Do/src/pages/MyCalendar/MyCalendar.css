@@ -100,9 +100,10 @@
 .calendar-grid-container {
   flex: 1;
   overflow: auto;
-  padding: 0 16px 16px;
+  padding: 0;
 }
 
+/* Month View Styles */
 .calendar-weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -206,6 +207,127 @@
   text-overflow: ellipsis;
 }
 
+/* Week View Styles */
+.week-view-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: auto;
+}
+
+.week-header {
+  display: flex;
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 10;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.week-header-spacer {
+  width: 60px;
+  min-width: 60px;
+  border-right: 1px solid #e0e0e0;
+}
+
+.week-day-headers {
+  display: flex;
+  flex: 1;
+}
+
+.week-day-header {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 0;
+  border-right: 1px solid #e0e0e0;
+  cursor: pointer;
+}
+
+.week-day-header:hover {
+  background-color: #f9f9f9;
+}
+
+.week-day-header.today {
+  background-color: #f0f7ff;
+}
+
+.week-day-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: #777;
+  margin-bottom: 4px;
+}
+
+.week-day-number {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.today-circle {
+  background-color: #1890ff;
+  color: white;
+  border-radius: 50%;
+}
+
+.week-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.week-time-row {
+  display: flex;
+  min-height: 60px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.time-label {
+  width: 60px;
+  min-width: 60px;
+  padding: 4px;
+  text-align: right;
+  font-size: 12px;
+  color: #777;
+  border-right: 1px solid #e0e0e0;
+}
+
+.week-day-slots {
+  display: flex;
+  flex: 1;
+}
+
+.week-day-slot {
+  flex: 1;
+  border-right: 1px solid #e0e0e0;
+  position: relative;
+  padding: 2px;
+}
+
+.week-day-slot.today {
+  background-color: #f0f7ff;
+}
+
+.week-task-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  background-color: #f0f0f0;
+  border-left: 3px solid #1890ff;
+  border-radius: 2px;
+  font-size: 12px;
+  color: #333;
+  margin-bottom: 2px;
+}
+
 .create-button {
   position: fixed;
   bottom: 24px;
@@ -222,6 +344,7 @@
   font-weight: 500;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 100;
 }
 
 .create-button:hover {
