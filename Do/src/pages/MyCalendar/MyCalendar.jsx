@@ -6,7 +6,7 @@ const MyCalendar = ({ tasks, onAddTask, onUpdateTask, onDeleteTask, onToggleComp
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
   const [calendarDays, setCalendarDays] = useState([]);
-  const [currentView, setCurrentView] = useState('week'); // Default to week view
+  const [currentView, setCurrentView] = useState('day'); // Default to day view
   const [showCreateTask, setShowCreateTask] = useState(false);
   const [newTaskText, setNewTaskText] = useState('');
   const [weekDays, setWeekDays] = useState([]);
@@ -140,25 +140,29 @@ const MyCalendar = ({ tasks, onAddTask, onUpdateTask, onDeleteTask, onToggleComp
     });
   };
 
-  const navigateToPreviousMonth = () => {
+  const navigateToPrevious = () => {
     setCurrentDate(prevDate => {
       const newDate = new Date(prevDate);
       if (currentView === 'month') {
         newDate.setMonth(newDate.getMonth() - 1);
-      } else {
+      } else if (currentView === 'week') {
         newDate.setDate(newDate.getDate() - 7);
+      } else if (currentView === 'day') {
+        newDate.setDate(newDate.getDate() - 1);
       }
       return newDate;
     });
   };
 
-  const navigateToNextMonth = () => {
+  const navigateToNext = () => {
     setCurrentDate(prevDate => {
       const newDate = new Date(prevDate);
       if (currentView === 'month') {
         newDate.setMonth(newDate.getMonth() + 1);
-      } else {
+      } else if (currentView === 'week') {
         newDate.setDate(newDate.getDate() + 7);
+      } else if (currentView === 'day') {
+        newDate.setDate(newDate.getDate() + 1);
       }
       return newDate;
     });
@@ -172,6 +176,15 @@ const MyCalendar = ({ tasks, onAddTask, onUpdateTask, onDeleteTask, onToggleComp
     return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
   };
 
+  const formatDayDate = (date) => {
+    return date.toLocaleDateString('en-US', { 
+      weekday: 'short', 
+      month: 'long', 
+      day: 'numeric',
+      year: 'numeric'
+    });
+  };
+
   const handleDateClick = (day) => {
     setSelectedDate(day.date);
   };
@@ -181,9 +194,9 @@ const MyCalendar = ({ tasks, onAddTask, onUpdateTask, onDeleteTask, onToggleComp
   };
 
   const handleCreateTaskSubmit = () => {
-    if (newTaskText.trim() && selectedDate) {
-      // Create a new task with the selected date
-      const taskDate = new Date(selectedDate);
+    if (newTaskText.trim()) {
+      // Create a new task with the selected date or current date
+      const taskDate = selectedDate ? new Date(selectedDate) : new Date(currentDate);
       taskDate.setHours(12, 0, 0); // Default to noon
       
       onAddTask(newTaskText, 'Personal', taskDate.toISOString());
@@ -210,53 +223,60 @@ const MyCalendar = ({ tasks, onAddTask, onUpdateTask, onDeleteTask, onToggleComp
     );
   };
 
-  const renderHourLabels = () => {
-    const hours = [];
-    for (let i = 8; i <= 23; i++) {
+  // Generate time slots for 24 hours
+  const generateTimeSlots = () => {
+    const slots = [];
+    for (let i = 0; i < 24; i++) {
       const hour = i % 12 === 0 ? 12 : i % 12;
       const ampm = i < 12 ? 'AM' : 'PM';
-      hours.push(
-        <div key={i} className="hour-label">
-          {`${hour}:00 ${ampm}`}
-        </div>
-      );
+      slots.push({
+        hour: i,
+        label: `${hour}:00 ${ampm}`
+      });
     }
-    return <div className="hour-labels">{hours}</div>;
+    return slots;
   };
 
-  const renderWeekView = () => {
-    // Generate time slots from 8 AM to 11 PM
-    const timeSlots = [];
-    for (let hour = 8; hour <= 23; hour++) {
-      const hourFormatted = hour % 12 === 0 ? 12 : hour % 12;
-      const ampm = hour < 12 ? 'AM' : 'PM';
-      
-      timeSlots.push(
-        <div key={hour} className="week-time-row">
-          <div className="time-label">{`${hourFormatted}:00 ${ampm}`}</div>
-          <div className="week-day-slots">
-            {weekDays.map((day, index) => {
-              const tasksForHour = getTasksForDateAndHour(day.date, hour);
-              
-              return (
-                <div 
-                  key={index} 
-                  className={`week-day-slot ${day.isToday ? 'today' : ''}`}
-                >
+  const timeSlots = generateTimeSlots();
+
+  const renderDayView = () => {
+    return (
+      <div className="day-view-container">
+        <div className="day-header">
+          <div className="current-day-display">
+            <div className="day-circle">
+              <span className="day-number">{currentDate.getDate()}</span>
+            </div>
+            <div className="day-name">
+              {currentDate.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase()}
+            </div>
+          </div>
+        </div>
+        
+        <div className="day-body">
+          {timeSlots.map((slot) => {
+            const tasksForHour = getTasksForDateAndHour(currentDate, slot.hour);
+            
+            return (
+              <div key={slot.hour} className="day-time-row">
+                <div className="time-label">{slot.label}</div>
+                <div className="day-time-slot">
                   {tasksForHour.map((task, taskIndex) => (
-                    <div key={taskIndex} className="week-task-item">
+                    <div key={taskIndex} className="day-task-item">
                       <div className="task-checkbox"></div>
                       <div className="task-title">{task.title}</div>
                     </div>
                   ))}
                 </div>
-              );
-            })}
-          </div>
+              </div>
+            );
+          })}
         </div>
-      );
-    }
-    
+      </div>
+    );
+  };
+
+  const renderWeekView = () => {
     return (
       <div className="week-view-container">
         <div className="week-header">
@@ -278,7 +298,30 @@ const MyCalendar = ({ tasks, onAddTask, onUpdateTask, onDeleteTask, onToggleComp
         </div>
         
         <div className="week-body">
-          {timeSlots}
+          {timeSlots.map((slot) => (
+            <div key={slot.hour} className="week-time-row">
+              <div className="time-label">{slot.label}</div>
+              <div className="week-day-slots">
+                {weekDays.map((day, index) => {
+                  const tasksForHour = getTasksForDateAndHour(day.date, slot.hour);
+                  
+                  return (
+                    <div 
+                      key={index} 
+                      className={`week-day-slot ${day.isToday ? 'today' : ''}`}
+                    >
+                      {tasksForHour.map((task, taskIndex) => (
+                        <div key={taskIndex} className="week-task-item">
+                          <div className="task-checkbox"></div>
+                          <div className="task-title">{task.title}</div>
+                        </div>
+                      ))}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     );
@@ -333,18 +376,23 @@ const MyCalendar = ({ tasks, onAddTask, onUpdateTask, onDeleteTask, onToggleComp
           <div className="calendar-navigation">
             <button 
               className="nav-button"
-              onClick={navigateToPreviousMonth}
+              onClick={navigateToPrevious}
             >
               <FiChevronLeft />
             </button>
             <button 
               className="nav-button"
-              onClick={navigateToNextMonth}
+              onClick={navigateToNext}
             >
               <FiChevronRight />
             </button>
           </div>
-          <h2 className="current-month">{formatMonthYear(currentDate)}</h2>
+          <h2 className="current-month">
+            {currentView === 'day' 
+              ? formatDayDate(currentDate) 
+              : formatMonthYear(currentDate)
+            }
+          </h2>
         </div>
         
         <div className="calendar-toolbar-right">
@@ -353,6 +401,7 @@ const MyCalendar = ({ tasks, onAddTask, onUpdateTask, onDeleteTask, onToggleComp
               value={currentView}
               onChange={(e) => handleViewChange(e.target.value)}
             >
+              <option value="day">DAY</option>
               <option value="week">WEEK</option>
               <option value="month">MONTH</option>
             </select>
@@ -390,7 +439,9 @@ const MyCalendar = ({ tasks, onAddTask, onUpdateTask, onDeleteTask, onToggleComp
       </div>
       
       <div className="calendar-grid-container">
-        {currentView === 'month' ? renderMonthView() : renderWeekView()}
+        {currentView === 'month' && renderMonthView()}
+        {currentView === 'week' && renderWeekView()}
+        {currentView === 'day' && renderDayView()}
       </div>
       
       <button className="create-button" onClick={handleCreateTask}>
