@@ -2,9 +2,10 @@
   flex: 1;
   overflow: hidden;
   height: 100%;
-  padding: 20px;
+  padding: 0;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .next7days-container {
@@ -13,21 +14,27 @@
   height: 100%;
   width: 100%;
   background-color: transparent;
-  padding: 0;
+  padding: 20px;
   box-sizing: border-box;
   overflow: hidden;
+  padding-top: 80px;
 }
 
 .app-header {
+  position: fixed;
+  top: 20px;
+  left: 260px;
+  right: 20px;
+  z-index: 100;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 12px 16px;
   background-color: rgba(255, 255, 255, 0.8);
   border-radius: 20px;
-  margin-bottom: 16px;
   backdrop-filter: blur(10px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: left 0.3s ease;
 }
 
 .header-left {
@@ -113,14 +120,6 @@
   cursor: pointer;
 }
 
-.days-grid-container {
-  flex: 1;
-  overflow: hidden;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-}
-
 .days-grid {
   display: flex;
   gap: 16px;
@@ -130,9 +129,14 @@
   scrollbar-color: rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.05);
   position: fixed;
   bottom: 20px;
-  left: 20px;
+  left: 260px;
   right: 20px;
-  top: 80px;
+  top: 100px;
+  transition: left 0.3s ease;
+}
+
+.main-content:not(.shifted) .days-grid {
+  left: 20px;
 }
 
 .day-card {
@@ -368,10 +372,19 @@
 
 @media (max-width: 768px) {
   .days-grid {
-    left: 10px;
-    right: 10px;
-    top: 70px;
-    bottom: 10px;
+    left: 20px;
+    right: 20px;
+    top: 80px;
+  }
+  
+  .app-header {
+    left: 20px;
+    right: 20px;
+  }
+  
+  .main-content.shifted .days-grid,
+  .main-content.shifted .app-header {
+    left: 250px;
   }
   
   .day-card {
@@ -597,4 +610,8 @@
 
 .day-tasks::-webkit-scrollbar-thumb:hover {
   background: #ccc;
+}
+
+.main-content:not(.shifted) .app-header {
+  left: 20px;
 } 

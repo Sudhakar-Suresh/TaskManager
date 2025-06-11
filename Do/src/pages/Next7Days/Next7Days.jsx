@@ -14,6 +14,7 @@ const Next7Days = ({
   onAddList
 }) => {
   const daysGridRef = useRef(null);
+  const appHeaderRef = useRef(null);
 
   // Get dates for the next 7 days
   const getDaysArray = () => {
@@ -56,7 +57,7 @@ const Next7Days = ({
   return (
     <div className="next7days-wrapper">
       <div className="next7days-container">
-        <div className="app-header">
+        <div className="app-header" ref={appHeaderRef}>
           <div className="header-left">
             <div className="calendar-icon">
               <FiCalendar size={20} />
