@@ -26,18 +26,40 @@
   margin-top: 8px;
 }
 
+.input-with-icon {
+  position: relative;
+  margin-bottom: 10px;
+}
+
 .day-add-task-input input {
   width: 100%;
   border: 1px solid #ddd;
   border-radius: 4px;
   padding: 8px 12px;
+  padding-right: 32px; /* Make room for the arrow icon */
   font-size: 14px;
-  margin-bottom: 10px;
   outline: none;
 }
 
 .day-add-task-input input:focus {
   border-color: #2196F3;
+}
+
+.day-add-task-input input.has-text {
+  border-color: #2196F3;
+}
+
+.arrow-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+  transition: color 0.2s ease;
+}
+
+.arrow-icon.active {
+  color: #2196F3;
 }
 
 .day-add-task-actions {
@@ -67,4 +89,9 @@
   background-color: transparent;
   color: #666;
   border: none;
+}
+
+/* Custom placeholder with arrow */
+.day-add-task-input input::placeholder {
+  color: #888;
 } 

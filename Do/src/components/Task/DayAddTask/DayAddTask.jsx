@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { FiPlus } from 'react-icons/fi';
+import { FiPlus, FiArrowUp } from 'react-icons/fi';
 import './DayAddTask.css';
 
 const DayAddTask = ({ onAddTask, dayIndex }) => {
@@ -74,15 +74,21 @@ const DayAddTask = ({ onAddTask, dayIndex }) => {
   return (
     <div className="day-add-task-wrapper" ref={containerRef}>
       <div className="day-add-task-input">
-        <input
-          type="text"
-          value={taskText}
-          onChange={(e) => setTaskText(e.target.value)}
-          placeholder="Enter task title"
-          ref={taskInputRef}
-          onKeyDown={handleKeyDown}
-          autoFocus
-        />
+        <div className="input-with-icon">
+          <input
+            type="text"
+            value={taskText}
+            onChange={(e) => setTaskText(e.target.value)}
+            placeholder="Enter task title"
+            ref={taskInputRef}
+            onKeyDown={handleKeyDown}
+            autoFocus
+            className={taskText ? "has-text" : ""}
+          />
+          <div className={`arrow-icon ${taskText ? "active" : ""}`}>
+            <FiArrowUp />
+          </div>
+        </div>
         
       </div>
     </div>
