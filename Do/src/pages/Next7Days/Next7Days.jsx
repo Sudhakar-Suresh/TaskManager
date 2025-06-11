@@ -1,9 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './Next7Days.css';
-import { FiPlus, FiCalendar, FiFilter, FiMoreHorizontal } from 'react-icons/fi';
-import { IoCloseOutline } from 'react-icons/io5';
+import { FiCalendar, FiFilter, FiMoreHorizontal } from 'react-icons/fi';
 import TaskCard from '../../components/Task/TaskCard/TaskCard';
-import AddTask from '../../components/Task/AddTask/AddTask';
+import DayAddTask from '../../components/Task/DayAddTask/DayAddTask';
 
 const Next7Days = ({ 
   tasks,
@@ -14,9 +13,6 @@ const Next7Days = ({
   userLists,
   onAddList
 }) => {
-  const [expandedTaskInput, setExpandedTaskInput] = useState(null);
-  const [taskText, setTaskText] = useState('');
-  const taskInputRef = useRef(null);
   const daysGridRef = useRef(null);
 
   // Get dates for the next 7 days
@@ -55,20 +51,6 @@ const Next7Days = ({
       !task.completed && 
       task.dueDate === dateStr
     );
-  };
-
-  // Add task with specific due date
-  const handleAddTaskForDay = (text, dayIndex) => {
-    if (text.trim()) {
-      // Calculate the target date based on dayIndex
-      const targetDate = new Date();
-      targetDate.setDate(targetDate.getDate() + dayIndex);
-      
-      // Format the date as ISO string but keep only the date part
-      const dateStr = targetDate.toISOString().split('T')[0];
-      
-      onAddTask(text, 'Personal', dateStr);
-    }
   };
 
   return (
@@ -135,59 +117,10 @@ const Next7Days = ({
                       />
                     ))}
                     
-                    <div className="day-add-task-wrapper">
-                      <div 
-                        className="day-add-task-button"
-                        onClick={() => setExpandedTaskInput(index)}
-                      >
-                        <FiPlus size={16} />
-                        <span>Add Task</span>
-                      </div>
-                      
-                      {expandedTaskInput === index && (
-                        <div className="day-add-task-input">
-                          <input
-                            type="text"
-                            value={taskText}
-                            onChange={(e) => setTaskText(e.target.value)}
-                            placeholder="Enter task title"
-                            ref={taskInputRef}
-                            autoFocus
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter' && !e.shiftKey) {
-                                e.preventDefault();
-                                handleAddTaskForDay(taskText, index);
-                                setTaskText('');
-                                setExpandedTaskInput(null);
-                              } else if (e.key === 'Escape') {
-                                setExpandedTaskInput(null);
-                                setTaskText('');
-                              }
-                            }}
-                          />
-                          <div className="day-add-task-actions">
-                            <button 
-                              onClick={() => {
-                                handleAddTaskForDay(taskText, index);
-                                setTaskText('');
-                                setExpandedTaskInput(null);
-                              }}
-                              disabled={!taskText.trim()}
-                            >
-                              Add
-                            </button>
-                            <button 
-                              onClick={() => {
-                                setExpandedTaskInput(null);
-                                setTaskText('');
-                              }}
-                            >
-                              Cancel
-                            </button>
-                          </div>
-                        </div>
-                      )}
-                    </div>
+                    <DayAddTask 
+                      onAddTask={onAddTask} 
+                      dayIndex={index} 
+                    />
                   </div>
                 </div>
               );
