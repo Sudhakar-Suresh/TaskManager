@@ -13,33 +13,36 @@
 
 .reminder-popup {
   background: white;
-  border-radius: 16px;
-  width: 360px;
+  border-radius: 12px;
+  width: 600px;
+  height: 550px;
   overflow: hidden;
   position: relative;
   z-index: 1001;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
 .reminder-header {
   text-align: center;
-  padding: 16px;
+  padding: 15px;
   border-bottom: 1px solid #eee;
 }
 
 .reminder-header h2 {
   margin: 0;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 500;
+  color: #333;
 }
 
 .reminder-content {
-  padding: 20px;
+  padding: 16px;
 }
 
 .date-time-inputs {
   display: flex;
   gap: 16px;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .input-group {
@@ -50,8 +53,11 @@
 .input-group label {
   display: block;
   font-size: 12px;
-  color: #666;
+  color: #333;
+  font-weight: 500;
   margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .input-group input {
@@ -59,43 +65,37 @@
   padding: 10px;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
-  font-size: 14px;
-  background: #f8f8f8;
+  font-size: 15px;
+  background: white;
+  color: #333;
 }
 
-.calendar-container {
-  margin-bottom: 16px;
-}
-
-.calendar-header {
+.month-display {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
-.calendar-header h3 {
+.month-display h3 {
   margin: 0;
   font-size: 16px;
   font-weight: 500;
+  color: #333;
 }
 
-.calendar-nav {
+.month-nav {
   display: flex;
-  gap: 12px;
+  gap: 8px;
 }
 
-.calendar-nav button {
+.month-nav button {
   background: none;
   border: none;
   font-size: 16px;
   color: #666;
   cursor: pointer;
   padding: 4px 8px;
-}
-
-.calendar-grid {
-  margin-bottom: 16px;
 }
 
 .weekdays {
@@ -108,13 +108,17 @@
 .weekdays span {
   font-size: 12px;
   color: #666;
-  padding: 4px;
+  padding: 10px;
+  font-weight: 500;
 }
 
 .days {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 2px;
+  margin-top: 30px;
+  margin-bottom: -230px;
+  margin-left: -150px;
   justify-items: center;
 }
 
@@ -122,21 +126,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 32px;
-  width: 32px;
-  margin: 2px;
+  height: 28px;
+  width: 28px;
   border-radius: 50%;
   cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.day:hover:not(.prev-month):not(.next-month) {
-  background-color: #f0f0f0;
+  font-size: 13px;
+  color: #333;
 }
 
 .day.selected {
   background-color: #007AFF;
   color: white;
+  font-weight: 500;
+}
+
+.day.today:not(.selected) {
+  border: 1px solid #007AFF;
+  color: #007AFF;
 }
 
 .day.prev-month,
@@ -146,68 +152,75 @@
 }
 
 .quick-options {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 8px;
-  margin-top: 16px;
+  margin-top: 20px;
 }
 
-.quick-options button {
-  padding: 8px 16px;
+.quick-option-btn {
+  padding: 8px 12px;
   border: 1px solid #e0e0e0;
-  border-radius: 8px;
+  border-radius: 20px;
   background: white;
   font-size: 14px;
   color: #333;
   cursor: pointer;
-  text-align: left;
+  text-align: center;
+  width: 110px;
+  align-self: flex-end;
 }
 
-.quick-options button:hover {
-  background-color: #f8f8f8;
+.recurring-container {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
-.recurring-btn {
+.recurring-option {
   display: flex;
   align-items: center;
   gap: 8px;
+  cursor: pointer;
 }
 
-.recurring-btn span {
-  font-size: 16px;
+.recurring-option input {
+  margin: 0;
+  width: 16px;
+  height: 16px;
+  accent-color: #007AFF;
+  cursor: pointer;
 }
 
-.recurring-btn.active {
-  background-color: #007AFF;
-  color: white;
-  border-color: #007AFF;
+.recurring-option span {
+  font-size: 14px;
+  color: #333;
 }
 
 .reminder-footer {
   display: flex;
   border-top: 1px solid #eee;
+  margin-top: 20px;
 }
 
 .reminder-footer button {
   flex: 1;
-  padding: 14px;
+  padding: 15px;
   border: none;
   background: none;
-  font-size: 14px;
+  font-size: 15px;
   cursor: pointer;
+  font-weight: 500;
 }
 
-.cancel-btn {
+.delete-btn {
   color: #666;
   border-right: 1px solid #eee;
 }
 
 .set-btn {
   color: #007AFF;
-}
-
-.set-btn:hover {
-  background-color: #f8f8f8;
 }
 
 .time-input {
@@ -240,11 +253,13 @@
   color: #333;
 }
 
-.time-option:hover {
-  background-color: #f5f5f5;
-}
-
 .time-option.selected {
   background-color: #007AFF;
   color: white;
 } 
+.calendars-grid {
+  margin-bottom: -150px;
+  height: 200px;
+  margin-left: -10px;
+  margin-right: 100px;
+}
