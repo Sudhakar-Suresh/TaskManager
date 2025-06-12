@@ -1,21 +1,23 @@
 .alltasks-root {
   height: 100%;
   width: 100%;
-  background-color: transparent;
+  background-color: #f5f5f5;
+  overflow: auto;
 }
 
 .alltasks-container {
   height: 100%;
-  padding: 24px;
-  background-color: white;
+  padding: 16px;
   display: flex;
   flex-direction: column;
 }
 
 .alltasks-header {
-  margin-bottom: 32px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  margin-bottom: 24px;
+  padding: 8px 8px 8px 16px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .header-main {
@@ -24,59 +26,249 @@
   align-items: center;
 }
 
+.header-title {
+  display: flex;
+  align-items: center;
+}
+
 .alltasks-header h1 {
-  font-size: 32px;
+  font-size: 24px;
   font-weight: 600;
   color: #333;
   margin: 0;
 }
 
 .dot {
-  color: #007AFF;
-}
-
-.subtitle {
-  font-size: 16px;
-  color: #666;
-  margin: 8px 0 0 0;
+  color: #ff9500;
 }
 
 .header-actions {
   display: flex;
-  gap: 12px;
+  gap: 8px;
 }
 
 .action-btn {
-  padding: 8px 16px;
+  padding: 6px 12px;
   border: 1px solid #e0e0e0;
-  border-radius: 4px;
+  border-radius: 6px;
   background: white;
   color: #666;
   cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.alltasks-content {
-  flex: 1;
+.action-icon {
+  font-size: 16px;
+}
+
+.action-btn:hover {
+  background: #f5f5f5;
+}
+
+/* Kanban Board Layout */
+.kanban-board {
+  display: flex;
+  gap: 16px;
+  height: calc(100% - 60px);
+  overflow-x: auto;
+  padding-bottom: 16px;
+  align-items: flex-start;
+}
+
+.kanban-column {
+  background: white;
+  border-radius: 8px;
+  min-width: 280px;
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  height: fit-content;
+  max-height: calc(100vh - 120px);
+  transition: background-color 0.2s ease;
+}
+
+.column-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.column-header h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+}
+
+.column-content {
+  padding: 8px;
+  overflow-y: auto;
+  max-height: calc(100vh - 180px);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Task wrapper for drag and drop */
+.task-wrapper {
+  cursor: grab;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.task-wrapper:active {
+  cursor: grabbing;
+}
+
+/* Add Task Input - minimal style as in the image */
+.add-task-container {
+  padding: 8px 0;
+  margin-top: 8px;
+}
+
+.add-task-button {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: #999;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  text-align: left;
+  border-radius: 4px;
+}
+
+.add-task-button:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.add-icon {
+  font-size: 16px;
+  margin-right: 8px;
+  color: #aaa;
+}
+
+.add-text {
+  color: #999;
+}
+
+/* Add Section Column */
+.add-section-column {
+  min-width: 280px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.add-section-button {
+  width: 100%;
+  padding: 12px;
+  border: 2px dashed #ddd;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.8);
+  color: #666;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 8px;
+  font-size: 14px;
+  transition: all 0.2s ease;
 }
 
-.empty-state {
+.add-section-icon {
+  font-size: 16px;
+}
+
+.add-section-button:hover {
+  background: white;
+  border-color: #ccc;
+  color: #333;
+}
+
+/* Task card overrides for kanban view */
+.kanban-column .task-card {
+  margin-bottom: 0;
+  height: auto;
+  min-height: 60px;
+}
+
+/* Drag and drop styles */
+.kanban-column.drag-over {
+  background-color: rgba(0, 122, 255, 0.05);
+  box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.3);
+}
+
+/* Scrollbar styling */
+.column-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.column-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.column-content::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.kanban-board::-webkit-scrollbar {
+  height: 8px;
+}
+
+.kanban-board::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.kanban-board::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+/* Task info styles */
+.task-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Empty column state */
+.column-content:empty::after {
+  content: "No tasks";
+  display: block;
   text-align: center;
+  color: #aaa;
+  padding: 16px 0;
+  font-size: 14px;
+}
+
+/* First task in column */
+.column-content .task-wrapper:first-child {
+  margin-top: 8px;
+}
+
+/* Example task styles */
+.example-task {
+  background-color: rgba(0, 122, 255, 0.1);
+  border: 1px dashed rgba(0, 122, 255, 0.3);
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 14px;
   color: #666;
 }
 
-.add-task-btn {
-  margin-top: 12px;
-  padding: 8px 16px;
-  border: none;
-  background: #007AFF;
-  color: white;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.add-task-btn:hover {
-  background: #0056b3;
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .header-actions {
+    display: none;
+  }
+  
+  .kanban-column {
+    min-width: 240px;
+    width: 240px;
+  }
 } 
