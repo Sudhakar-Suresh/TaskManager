@@ -1,0 +1,231 @@
+.task-create-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.task-create-popup {
+  background: white;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.task-create-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.task-type-selector {
+  display: flex;
+  background-color: #f5f5f5;
+  border-radius: 20px;
+  padding: 2px;
+}
+
+.type-btn {
+  background: none;
+  border: none;
+  padding: 6px 16px;
+  font-size: 14px;
+  border-radius: 18px;
+  cursor: pointer;
+  color: #666;
+}
+
+.type-btn.selected {
+  background-color: white;
+  color: #333;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #666;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.close-btn:hover {
+  background-color: #f5f5f5;
+}
+
+.task-create-content {
+  padding: 16px 24px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.list-path {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 16px;
+}
+
+.title-input {
+  width: 100%;
+  border: none;
+  font-size: 24px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 24px;
+  padding: 0;
+}
+
+.title-input::placeholder {
+  color: #ccc;
+  font-weight: 400;
+}
+
+.title-input:focus {
+  outline: none;
+}
+
+.task-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.option-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: none;
+  border: none;
+  padding: 10px 0;
+  cursor: pointer;
+  text-align: left;
+  color: #666;
+  font-size: 14px;
+}
+
+.option-btn.active {
+  color: #333;
+}
+
+.option-icon {
+  font-size: 18px;
+  color: #666;
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+  margin-left: auto;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #FF5A5A;
+}
+
+input:checked + .slider:before {
+  transform: translateX(20px);
+}
+
+.slider.round {
+  border-radius: 20px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.notes-input {
+  width: 100%;
+  min-height: 100px;
+  border: none;
+  resize: none;
+  font-size: 14px;
+  color: #666;
+  font-family: inherit;
+}
+
+.notes-input::placeholder {
+  color: #aaa;
+}
+
+.notes-input:focus {
+  outline: none;
+}
+
+.task-create-footer {
+  padding: 16px 24px;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.save-btn {
+  background-color: #8AB4F8;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.save-btn:hover {
+  background-color: #6B9EF7;
+}
+
+.save-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+} 

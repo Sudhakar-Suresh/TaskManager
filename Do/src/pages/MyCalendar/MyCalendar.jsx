@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { FiChevronLeft, FiChevronRight, FiPlus } from 'react-icons/fi';
 import './MyCalendar.css';
+import TaskCreatePopup from '../../components/Task/TaskCreatePopup/TaskCreatePopup';
 
-const MyCalendar = ({ tasks, onAddTask, onUpdateTask, onDeleteTask, onToggleComplete }) => {
+const MyCalendar = ({ tasks, onAddTask, onUpdateTask, onDeleteTask, onToggleComplete, userLists, onAddList }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
   const [calendarDays, setCalendarDays] = useState([]);
   const [currentView, setCurrentView] = useState('day'); // Default to day view
-  const [showCreateTask, setShowCreateTask] = useState(false);
+  const [showTaskCreatePopup, setShowTaskCreatePopup] = useState(false);
   const [newTaskText, setNewTaskText] = useState('');
   const [weekDays, setWeekDays] = useState([]);
 
@@ -186,22 +187,47 @@ const MyCalendar = ({ tasks, onAddTask, onUpdateTask, onDeleteTask, onToggleComp
   };
 
   const handleDateClick = (day) => {
-    setSelectedDate(day.date);
+    const selectedDateTime = new Date(day.date);
+    selectedDateTime.setHours(12, 0, 0, 0); // Set to noon by default
+    setSelectedDate(selectedDateTime);
+    setShowTaskCreatePopup(true);
   };
 
   const handleCreateTask = () => {
-    setShowCreateTask(true);
+    setShowTaskCreatePopup(true);
   };
 
-  const handleCreateTaskSubmit = () => {
-    if (newTaskText.trim()) {
-      // Create a new task with the selected date or current date
-      const taskDate = selectedDate ? new Date(selectedDate) : new Date(currentDate);
-      taskDate.setHours(12, 0, 0); // Default to noon
-      
-      onAddTask(newTaskText, 'Personal', taskDate.toISOString());
-      setShowCreateTask(false);
-      setNewTaskText('');
+  const handleTaskSave = (taskData) => {
+    // Make sure we have a valid date from either the reminder, selectedDate, or current date
+    const taskDate = taskData.reminder?.date || selectedDate?.toISOString() || new Date().toISOString();
+    
+    // Create a complete task object
+    const newTask = {
+      id: Date.now().toString(), // Generate a unique ID
+      title: taskData.title,
+      notes: taskData.notes || '',
+      list: taskData.list || 'Personal',
+      tags: taskData.tags || [],
+      dueDate: taskDate,
+      completed: false,
+      createdAt: new Date().toISOString()
+    };
+    
+    // Call onAddTask with the new task
+    onAddTask(
+      newTask.title,
+      newTask.list,
+      newTask.dueDate,
+      newTask.notes,
+      newTask.tags
+    );
+    
+    // Close the popup after saving
+    setShowTaskCreatePopup(false);
+    
+    // Reset the selected date to ensure proper behavior for next task creation
+    if (!selectedDate) {
+      setSelectedDate(new Date(taskDate));
     }
   };
 
@@ -260,7 +286,10 @@ const MyCalendar = ({ tasks, onAddTask, onUpdateTask, onDeleteTask, onToggleComp
             return (
               <div key={slot.hour} className="day-time-row">
                 <div className="time-label">{slot.label}</div>
-                <div className="day-time-slot">
+                <div 
+                  className="day-time-slot"
+                  onClick={() => handleTimeSlotClick(currentDate, slot.hour)}
+                >
                   {tasksForHour.map((task, taskIndex) => (
                     <div key={taskIndex} className="day-task-item">
                       <div className="task-checkbox"></div>
@@ -286,7 +315,7 @@ const MyCalendar = ({ tasks, onAddTask, onUpdateTask, onDeleteTask, onToggleComp
               <div 
                 key={index} 
                 className={`week-day-header ${day.isToday ? 'today' : ''}`}
-                onClick={() => setSelectedDate(day.date)}
+                onClick={() => handleDateClick(day)}
               >
                 <div className="week-day-name">{day.dayName}</div>
                 <div className={`week-day-number ${day.isToday ? 'today-circle' : ''}`}>
@@ -309,6 +338,7 @@ const MyCalendar = ({ tasks, onAddTask, onUpdateTask, onDeleteTask, onToggleComp
                     <div 
                       key={index} 
                       className={`week-day-slot ${day.isToday ? 'today' : ''}`}
+                      onClick={() => handleTimeSlotClick(day.date, slot.hour)}
                     >
                       {tasksForHour.map((task, taskIndex) => (
                         <div key={taskIndex} className="week-task-item">
@@ -361,6 +391,14 @@ const MyCalendar = ({ tasks, onAddTask, onUpdateTask, onDeleteTask, onToggleComp
         </div>
       </>
     );
+  };
+
+  // Add a new function to handle time slot clicks
+  const handleTimeSlotClick = (date, hour) => {
+    const selectedDateTime = new Date(date);
+    selectedDateTime.setHours(hour, 0, 0, 0);
+    setSelectedDate(selectedDateTime);
+    setShowTaskCreatePopup(true);
   };
 
   return (
@@ -449,23 +487,15 @@ const MyCalendar = ({ tasks, onAddTask, onUpdateTask, onDeleteTask, onToggleComp
         <span>Create</span>
       </button>
       
-      {showCreateTask && (
-        <div className="create-task-modal">
-          <div className="create-task-content">
-            <h3>Create Task</h3>
-            <input 
-              type="text"
-              placeholder="Task title"
-              value={newTaskText}
-              onChange={(e) => setNewTaskText(e.target.value)}
-            />
-            <div className="create-task-actions">
-              <button onClick={() => setShowCreateTask(false)}>Cancel</button>
-              <button onClick={handleCreateTaskSubmit}>Create</button>
-            </div>
-          </div>
-        </div>
-      )}
+      <TaskCreatePopup
+        isOpen={showTaskCreatePopup}
+        onClose={() => setShowTaskCreatePopup(false)}
+        onSave={handleTaskSave}
+        initialDate={selectedDate ? selectedDate.toISOString() : null}
+        initialList="Personal"
+        userLists={userLists || ['Personal', 'Work']}
+        onAddList={onAddList}
+      />
     </div>
   );
 };

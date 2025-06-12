@@ -150,7 +150,17 @@ function App() {
     }
 
     if (activePage === 'My Calendar') {
-      return <MyCalendar />;
+      return (
+        <MyCalendar 
+          tasks={tasks}
+          onAddTask={handleAddTask}
+          onUpdateTask={handleUpdateTask}
+          onDeleteTask={handleDeleteTask}
+          onToggleComplete={handleToggleComplete}
+          userLists={userLists}
+          onAddList={handleAddList}
+        />
+      );
     }
 
     if (activePage === 'Completed') {
