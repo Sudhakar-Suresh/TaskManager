@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FiChevronLeft, FiChevronRight, FiPlus } from 'react-icons/fi';
 import './MyCalendar.css';
 import TaskCreatePopup from '../../components/Task/TaskCreatePopup/TaskCreatePopup';
+import TaskExpandedPopup from '../../components/Task/TaskExpandedPopup/TaskExpandedPopup';
 
 const MyCalendar = ({ tasks, onAddTask, onUpdateTask, onDeleteTask, onToggleComplete, userLists, onAddList }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -11,6 +12,10 @@ const MyCalendar = ({ tasks, onAddTask, onUpdateTask, onDeleteTask, onToggleComp
   const [showTaskCreatePopup, setShowTaskCreatePopup] = useState(false);
   const [newTaskText, setNewTaskText] = useState('');
   const [weekDays, setWeekDays] = useState([]);
+  
+  // New state variables for task expanded popup
+  const [selectedTask, setSelectedTask] = useState(null);
+  const [showTaskExpandedPopup, setShowTaskExpandedPopup] = useState(false);
 
   // Get days for the calendar
   useEffect(() => {
@@ -265,6 +270,12 @@ const MyCalendar = ({ tasks, onAddTask, onUpdateTask, onDeleteTask, onToggleComp
 
   const timeSlots = generateTimeSlots();
 
+  const handleTaskClick = (e, task) => {
+    e.stopPropagation(); // Prevent triggering the day click handler
+    setSelectedTask(task);
+    setShowTaskExpandedPopup(true);
+  };
+
   const renderDayView = () => {
     return (
       <div className="day-view-container">
@@ -291,7 +302,11 @@ const MyCalendar = ({ tasks, onAddTask, onUpdateTask, onDeleteTask, onToggleComp
                   onClick={() => handleTimeSlotClick(currentDate, slot.hour)}
                 >
                   {tasksForHour.map((task, taskIndex) => (
-                    <div key={taskIndex} className="day-task-item">
+                    <div 
+                      key={taskIndex} 
+                      className="day-task-item"
+                      onClick={(e) => handleTaskClick(e, task)}
+                    >
                       <div className="task-checkbox"></div>
                       <div className="task-title">{task.title}</div>
                     </div>
@@ -341,7 +356,11 @@ const MyCalendar = ({ tasks, onAddTask, onUpdateTask, onDeleteTask, onToggleComp
                       onClick={() => handleTimeSlotClick(day.date, slot.hour)}
                     >
                       {tasksForHour.map((task, taskIndex) => (
-                        <div key={taskIndex} className="week-task-item">
+                        <div 
+                          key={taskIndex} 
+                          className="week-task-item"
+                          onClick={(e) => handleTaskClick(e, task)}
+                        >
                           <div className="task-checkbox"></div>
                           <div className="task-title">{task.title}</div>
                         </div>
@@ -379,7 +398,11 @@ const MyCalendar = ({ tasks, onAddTask, onUpdateTask, onDeleteTask, onToggleComp
                 <div className="day-number">{day.date.getDate()}</div>
                 <div className="day-tasks">
                   {tasksForDay.map((task, taskIndex) => (
-                    <div key={taskIndex} className="calendar-task">
+                    <div 
+                      key={taskIndex} 
+                      className="calendar-task"
+                      onClick={(e) => handleTaskClick(e, task)}
+                    >
                       <div className="task-checkbox"></div>
                       <div className="task-title">{task.title}</div>
                     </div>
@@ -399,6 +422,11 @@ const MyCalendar = ({ tasks, onAddTask, onUpdateTask, onDeleteTask, onToggleComp
     selectedDateTime.setHours(hour, 0, 0, 0);
     setSelectedDate(selectedDateTime);
     setShowTaskCreatePopup(true);
+  };
+
+  // Add a function to handle task updates from the expanded popup
+  const handleTaskUpdate = (updatedTask) => {
+    onUpdateTask(updatedTask);
   };
 
   return (
@@ -496,6 +524,21 @@ const MyCalendar = ({ tasks, onAddTask, onUpdateTask, onDeleteTask, onToggleComp
         userLists={userLists || ['Personal', 'Work']}
         onAddList={onAddList}
       />
+
+      {/* Add the TaskExpandedPopup component */}
+      {selectedTask && (
+        <TaskExpandedPopup
+          isOpen={showTaskExpandedPopup}
+          onClose={() => setShowTaskExpandedPopup(false)}
+          task={selectedTask}
+          onUpdate={handleTaskUpdate}
+          onDelete={onDeleteTask}
+          currentList={selectedTask.list || 'Personal'}
+          selectedTags={selectedTask.tags || []}
+          userLists={userLists || ['Personal', 'Work']}
+          onAddList={onAddList}
+        />
+      )}
     </div>
   );
 };
